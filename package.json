@@ -1,9 +1,11 @@
 {
-  "name": "live-nextjs-starter",
+  "name": "combined-nextjs-fastapi-deepgram",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn api.index:app --reload",
+    "next-dev": "next dev",
+    "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,21 +13,25 @@
   "dependencies": {
     "@deepgram/sdk": "^3.0.0-beta.2",
     "@svgr/webpack": "^8.1.0",
-    "@uidotdev/usehooks": "^2.4.1",
+    "@types/node": "20.2.4",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "autoprefixer": "10.4.14",
+    "concurrently": "^8.0.1",
+    "eslint": "8.41.0",
+    "eslint-config-next": "14.0.1",
     "next": "14.0.1",
-    "react": "^18",
-    "react-dom": "^18",
+    "postcss": "8.4.23",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.3.2",
+    "typescript": "5.0.4",
+    "@uidotdev/usehooks": "^2.4.1",
     "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "@types/react-dom": "^18"
   }
 }
