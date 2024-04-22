@@ -2,15 +2,20 @@ from fastapi import FastAPI, Request, WebSocket
 from fastapi.responses import HTMLResponse, FileResponse
 import logging
 
+import os
+
+print("Current working directory:12345", os.getcwd())
 # from fastapi.templating import Jinja2Templates
 from typing import Dict, Callable
 from deepgram import Deepgram
 from dotenv import load_dotenv
+
+# from test import factorial
 from fastapi.middleware.cors import CORSMiddleware
-from chat_with_felix_groq import analyze_excerpt
+from api.chat_with_felix_groq import analyze_excerpt
 from pydantic import BaseModel
 
-import os
+# import os
 
 load_dotenv()
 
@@ -34,6 +39,11 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+
+
+@app.get("/")
+async def read_root():
+    return {"message": "Welcome to my API"}
 
 
 # @app.get("/", response_class=FileResponse)
