@@ -6,11 +6,16 @@ import {
   LiveTranscriptionEvents,
   createClient,
 } from "@deepgram/sdk";
-import { useState, useEffect, useCallback } from "react";
+
+//deegram values
+import  React, { useState, useEffect, useCallback } from "react";
+import useWebSocket from 'react-use-websocket';
 import { useQueue } from "@uidotdev/usehooks";
 import Dg from "./dg.svg";
 import Recording from "./recording.svg";
 import Image from "next/image";
+
+//useState, useEffect etc
 
 export default function Microphone() {
   const { add, remove, first, size, queue } = useQueue<any>([]);
@@ -24,8 +29,11 @@ export default function Microphone() {
   const [microphone, setMicrophone] = useState<MediaRecorder | null>();
   const [userMedia, setUserMedia] = useState<MediaStream | null>();
   const [caption, setCaption] = useState<string | null>();
+  const [extractedQuestion, setExtractedQuestion] = useState<string>('');
 
-  console.log(apiKey + "nyc");
+
+  //setup all this stuff in state
+
 
   const toggleMicrophone = useCallback(async () => {
     if (microphone && userMedia) {
@@ -58,6 +66,7 @@ export default function Microphone() {
     }
   }, [add, microphone, userMedia]);
 
+  //this is a function for adding the microphone??
 
 
   useEffect(() => {
@@ -77,6 +86,32 @@ export default function Microphone() {
         });
     }
   }, [apiKey]);
+
+
+  const websocketURL = process.env.NODE_ENV === 'development'
+  ? 'ws://127.0.0.1:8000/listen'  // Development WebSocket URL
+  : 'wss://your-production-url/ws';  // Production WebSocket URL
+
+// Setting up the WebSocket connection
+const { sendJsonMessage, lastJsonMessage } = useWebSocket(websocketURL, {
+    onOpen: () => console.log("WebSocket Connected"),
+    onClose: () => console.log("WebSocket Disconnected"),
+    shouldReconnect: (closeEvent) => {
+        console.log("Attempting to reconnect...", closeEvent);
+        return true; // Always attempt to reconnect
+    },
+    reconnectInterval: 3000, // Attempts to reconnect every 3 seconds
+    onMessage: () => {
+        console.log("Received message:", lastJsonMessage);  // Log received message
+        if (lastJsonMessage !== null) {
+            setExtractedQuestion(lastJsonMessage.modifiedText);  // Update state with the modified text
+        }
+    },
+    onError: (error) => {
+        console.error('WebSocket Error:', error);  // Log errors
+    }
+});
+
 
   useEffect(() => {
     if (apiKey && "key" in apiKey) {
