@@ -66,19 +66,16 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
-            data = await websocket.receive_bytes()
-            # Process your data here (uncomment and modify according to your application's logic)
-            # deepgram_socket.send(data)
-            # For example, just echoing back the data for now
-            await websocket.send_bytes(
-                data
-            )  # Echo the received bytes back to the client
-
+            # Receive text instead of bytes for easier processing
+            data = await websocket.receive_text()
+            # Process the data using the analyze_excerpt function
+            analysis_result = analyze_excerpt(data)
+            # Send the analysis result back to the client as JSON
+            await websocket.send_json(analysis_result)
     except WebSocketDisconnect:
         logging.info("WebSocket connection closed by the client.")
     except Exception as e:
         logging.error(f"Error occurred: {e}")
-        # Optionally send an error message back to the client
         await websocket.send_text(f"Error occurred: {e}")
     finally:
         await websocket.close()

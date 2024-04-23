@@ -92,25 +92,28 @@ export default function Microphone() {
   ? 'ws://127.0.0.1:8000/listen'  // Development WebSocket URL
   : 'wss://your-production-url/ws';  // Production WebSocket URL
 
-// Setting up the WebSocket connection
-const { sendJsonMessage, lastJsonMessage } = useWebSocket(websocketURL, {
+  const { sendMessage, lastMessage, readyState } = useWebSocket(websocketURL, {
     onOpen: () => console.log("WebSocket Connected"),
     onClose: () => console.log("WebSocket Disconnected"),
-    shouldReconnect: (closeEvent) => {
-        console.log("Attempting to reconnect...", closeEvent);
-        return true; // Always attempt to reconnect
+    onMessage: (event) => {
+        console.log("Received message:", event.data);  // Log received message as plain text
+        setExtractedQuestion(event.data);  // Update state with the analysis or response
     },
+    shouldReconnect: (closeEvent) => true, // Always attempt to reconnect
     reconnectInterval: 3000, // Attempts to reconnect every 3 seconds
-    onMessage: () => {
-        console.log("Received message:", lastJsonMessage);  // Log received message
-        if (lastJsonMessage !== null) {
-            setExtractedQuestion(lastJsonMessage.modifiedText);  // Update state with the modified text
-        }
-    },
     onError: (error) => {
         console.error('WebSocket Error:', error);  // Log errors
     }
 });
+
+// Example event handler for sending transcription to WebSocket
+const handleTranscription = (transcription) => {
+  if (readyState === WebSocket.OPEN) {
+    sendMessage(transcription);  // Send the transcription text
+  } else {
+    console.log('WebSocket is not open. ReadyState:', readyState);
+  }
+};
 
 
   useEffect(() => {
@@ -142,6 +145,7 @@ const { sendJsonMessage, lastJsonMessage } = useWebSocket(websocketURL, {
           .join(" ");
         if (caption !== "") {
           setCaption(caption);
+          handleTranscription(caption);
         }
       });
 
