@@ -107,10 +107,12 @@ export default function Microphone() {
     onError: (error) => {
         console.error('WebSocket Error:', error);  // Log errors
     }
-});
+  });
+  
+  
 
 // Example event handler for sending transcription to WebSocket
-  const handleTranscription = (transcription) => {
+const handleTranscription = (transcription: string) => {
   console.log('transcriptio sending to fastAPI')
   if (readyState === WebSocket.OPEN) {
     sendMessage(transcription);  // Send the transcription text
