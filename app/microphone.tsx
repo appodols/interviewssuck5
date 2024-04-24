@@ -96,8 +96,11 @@ export default function Microphone() {
     onOpen: () => console.log("WebSocket Connected"),
     onClose: () => console.log("WebSocket Disconnected"),
     onMessage: (event) => {
-        console.log("Received message:", event.data);  // Log received message as plain text
-        setExtractedQuestion(event.data);  // Update state with the analysis or response
+      console.log("Received message:", event.data);  // Log received message as plain text
+      // Directly check if the data is not an empty string
+      if (event.data !== "") {
+        setExtractedQuestion(event.data);
+      }
     },
     shouldReconnect: (closeEvent) => true, // Always attempt to reconnect
     reconnectInterval: 3000, // Attempts to reconnect every 3 seconds
@@ -184,6 +187,7 @@ const handleTranscription = (transcription) => {
 
   return (
     <div className="w-full relative">
+      <div>{extractedQuestion}</div>
       <div className="mt-10 flex flex-col align-middle items-center">
         {!!userMedia && !!microphone && micOpen ? (
           <Image
