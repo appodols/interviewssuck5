@@ -93,8 +93,8 @@ export default function Microphone() {
   : 'wss://your-production-url/ws';  // Production WebSocket URL
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(websocketURL, {
-    onOpen: () => console.log("WebSocket Connected"),
-    onClose: () => console.log("WebSocket Disconnected"),
+    onOpen: () => console.log("fastAPIWebSocket Connected"),
+    onClose: () => console.log("fastAPI WebSocket Disconnected"),
     onMessage: (event) => {
       console.log("Received message:", event.data);  // Log received message as plain text
       // Directly check if the data is not an empty string
@@ -110,7 +110,8 @@ export default function Microphone() {
 });
 
 // Example event handler for sending transcription to WebSocket
-const handleTranscription = (transcription) => {
+  const handleTranscription = (transcription) => {
+  console.log('transcriptio sending to fastAPI')
   if (readyState === WebSocket.OPEN) {
     sendMessage(transcription);  // Send the transcription text
   } else {
@@ -130,12 +131,12 @@ const handleTranscription = (transcription) => {
       });
 
       connection.on(LiveTranscriptionEvents.Open, () => {
-        console.log("connection established");
+        console.log("deepgram connection established");
         setListening(true);
       });
 
       connection.on(LiveTranscriptionEvents.Close, () => {
-        console.log("connection closed");
+        console.log(" deepgram connection closed");
         setListening(false);
         setApiKey(null);
         setConnection(null);

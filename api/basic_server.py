@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Request, WebSocket
 from fastapi.responses import HTMLResponse, FileResponse
+from starlette.websockets import WebSocketDisconnect
 import logging
 
 import os
 
-print("Current working directory:12345", os.getcwd())
+# print("Current working directory:12345", os.getcwd())
 # from fastapi.templating import Jinja2Templates
 from typing import Dict, Callable
 from deepgram import Deepgram
@@ -66,17 +67,18 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
-            # Receive text instead of bytes for easier processing
             data = await websocket.receive_text()
-            # Process the data using the analyze_excerpt function
-            analysis_result = analyze_excerpt(data)
-            # Send the analysis result back to the client as JSON
-            await websocket.send_json(analysis_result)
+            logging.info(f"Received data: {data}")
+            if data:
+                analysis_result = analyze_excerpt(data)
+                await websocket.send_json(analysis_result)
+            else:
+                await websocket.send_text("No data received")
     except WebSocketDisconnect:
         logging.info("WebSocket connection closed by the client.")
     except Exception as e:
-        logging.error(f"Error occurred: {e}")
-        await websocket.send_text(f"Error occurred: {e}")
+        logging.error(f"Unhandled error: {e}")
+        await websocket.send_text(f"Error occurred: {str(e)}")
     finally:
         await websocket.close()
         logging.info("WebSocket connection closed.")
