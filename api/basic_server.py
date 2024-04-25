@@ -31,6 +31,7 @@ class InterviewExcerpt(BaseModel):
 origins = [
     "http://localhost:8000",  # Adjust the port if your client is served on a different port
     "http://127.0.0.1:8000",
+    "https://interviewbasic.vercel.app",
 ]
 
 app.add_middleware(

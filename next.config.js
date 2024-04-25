@@ -14,25 +14,25 @@ const nextConfig = {
   rewrites: async () => {
     return [
       {
-        source: "/api/:path*",
-        destination:
-          process.env.NODE_ENV === "development"
-            ? "http://127.0.0.1:8000/api/:path*"
-            : "/api/",
+        source: '/api/:path*',
+        destination: 
+          process.env.NODE_ENV === 'development'
+          ? 'http://127.0.0.1:8000/api/:path*'
+          : 'https://interviewbasic.vercel.app/api/:path*',
       },
       {
-        source: "/docs",
+        source: '/docs',
         destination:
-          process.env.NODE_ENV === "development"
-            ? "http://127.0.0.1:8000/docs"
-            : "/api/docs",
+          process.env.NODE_ENV === 'development'
+          ? 'http://127.0.0.1:8000/docs'
+          : 'https://interviewbasic.vercel.app/docs',
       },
       {
-        source: "/openapi.json",
+        source: '/openapi.json',
         destination:
-          process.env.NODE_ENV === "development"
-            ? "http://127.0.0.1:8000/openapi.json"
-            : "/api/openapi.json",
+          process.env.NODE_ENV === 'development'
+          ? 'http://127.0.0.1:8000/openapi.json'
+          : 'https://interviewbasic.vercel.app/openapi.json',
       },
     ];
   },
