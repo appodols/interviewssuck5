@@ -90,7 +90,7 @@ export default function Microphone() {
 
   const websocketURL = process.env.NODE_ENV === 'development'
   ? 'ws://127.0.0.1:8000/listen'  // Development WebSocket URL
-  : 'wss://your-production-url/ws';  // Production WebSocket URL
+  : 'wss://interviewbasic.vercel.app/ws';  // Production WebSocket URL
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(websocketURL, {
     onOpen: () => console.log("fastAPIWebSocket Connected"),
