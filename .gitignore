@@ -1,36 +1,98 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
+### Node.js ###
+# Dependency directories
+/node_modules/
+/.pnp/
 .pnp.js
+
+# Compiled Javascript files
+*.js
+*.js.map
+
+# Yarn Integrity file
 .yarn/install-state.gz
 
-# testing
-/coverage
+### Testing ###
+/coverage/
 
-# next.js
+### Next.js ###
+# Next.js build output
 /.next/
 /out/
 
-# production
-/build
+### Production ###
+/build/
 
-# misc
+### Miscellaneous ###
+# macOS system files
 .DS_Store
+
+# Certificates
 *.pem
 
-# debug
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+### Local Environment Files ###
 .env*.local
 
-# vercel
-.vercel
+### Vercel ###
+# Vercel deployment files
+.vercel/
 
-# typescript
+### TypeScript ###
+# TypeScript build artifacts
 *.tsbuildinfo
 next-env.d.ts
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+### Editors ###
+# Visual Studio Code
+.vscode/
+
+# Sublime Text
+*.sublime-workspace
+
+# IntelliJ
+.idea/
+
+# vim
+*.swp
+
+### OS generated files ###
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+### Build ###
+# dotenv environment variables file
+.env
+.env.production

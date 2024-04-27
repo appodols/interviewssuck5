@@ -8,12 +8,14 @@ import {
 } from "@deepgram/sdk";
 
 //deegram values
-import  React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Pusher from 'pusher-js';
 import useWebSocket from 'react-use-websocket';
 import { useQueue } from "@uidotdev/usehooks";
 import Dg from "./dg.svg";
 import Recording from "./recording.svg";
 import Image from "next/image";
+import { data } from "autoprefixer";
 
 //useState, useEffect etc
 
@@ -87,40 +89,96 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
+  // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
+  // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
+  // // console.log('Pusher App Key:', process.env.PUSHER_APP_ID);
+  // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
 
-  const websocketURL = process.env.NODE_ENV === 'development'
-  ? 'ws://127.0.0.1:8000/listen'  // Development WebSocket URL
-  : 'wss://interviewbasic.vercel.app/ws';  // Production WebSocket URL
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(websocketURL, {
-    onOpen: () => console.log("fastAPIWebSocket Connected"),
-    onClose: () => console.log("fastAPI WebSocket Disconnected"),
-    onMessage: (event) => {
-      console.log("Received message:", event.data);  // Log received message as plain text
-      // Directly check if the data is not an empty string
-      if (event.data !== "") {
-        setExtractedQuestion(event.data);
-      }
-    },
-    shouldReconnect: (closeEvent) => true, // Always attempt to reconnect
-    reconnectInterval: 3000, // Attempts to reconnect every 3 seconds
-    onError: (error) => {
-        console.error('WebSocket Error:', error);  // Log errors
+  // useEffect(() => {
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
+  //       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+  //       encrypted: true
+  //   });
+  
+  //   console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+  //   console.log('Pusher initiated!');
+  //   const channel = pusher.subscribe('my-channel');
+
+  //   channel.bind('new-analysis', function (data) {
+  //       console.log(data)
+  //       setExtractedQuestion(data.message);
+  //   });
+  
+  //   return () => {
+  //       channel.unbind_all();
+  //       channel.unsubscribe();
+  //   };
+  // }, []);
+
+  // const websocketURL = process.env.NODE_ENV === 'development'
+  // ? 'ws://127.0.0.1:8000/listen'  // Development WebSocket URL
+  // : 'wss://interviewbasic.vercel.app/ws';  // Production WebSocket URL
+
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(websocketURL, {
+  //   onOpen: () => console.log("fastAPIWebSocket Connected"),
+  //   onClose: () => console.log("fastAPI WebSocket Disconnected"),
+  //   onMessage: (event) => {
+  //     console.log("Received message:", event.data);  // Log received message as plain text
+  //     // Directly check if the data is not an empty string
+  //     if (event.data !== "") {
+  //       setExtractedQuestion(event.data);
+  //     }
+  //   },
+  //   shouldReconnect: (closeEvent) => true, // Always attempt to reconnect
+  //   reconnectInterval: 3000, // Attempts to reconnect every 3 seconds
+  //   onError: (error) => {
+  //       console.error('WebSocket Error:', error);  // Log errors
+  //   }
+  // });
+  
+  
+
+// // Example event handler for sending transcription to WebSocket
+// const handleTranscription = (transcription: string) => {
+//   console.log('transcriptio sending to fastAPI')
+//   if (readyState === WebSocket.OPEN) {
+//     sendMessage(transcription);  // Send the transcription text
+//   } else {
+//     console.log('WebSocket is not open. ReadyState:', readyState);
+//   }
+// };
+
+const sendTranscriptionToServer = async (transcriptionText) => {
+  try {
+    const response = await fetch('http://localhost:8000/analyze-text/', { // Updated endpoint
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json', // Added for consistency with the curl command
+      },
+      body: JSON.stringify({ text: transcriptionText }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  });
-  
-  
 
-// Example event handler for sending transcription to WebSocket
-const handleTranscription = (transcription: string) => {
-  console.log('transcriptio sending to fastAPI')
-  if (readyState === WebSocket.OPEN) {
-    sendMessage(transcription);  // Send the transcription text
-  } else {
-    console.log('WebSocket is not open. ReadyState:', readyState);
+    const result = await response.json();
+    console.log('Analysis result:', result);
+  } catch (error) {
+    console.error('Error sending transcription to server:', error);
   }
 };
 
+  
+  
+
+  
+  
+  
+  
+  
 
   useEffect(() => {
     if (apiKey && "key" in apiKey) {
@@ -151,7 +209,7 @@ const handleTranscription = (transcription: string) => {
           .join(" ");
         if (caption !== "") {
           setCaption(caption);
-          handleTranscription(caption);
+          sendTranscriptionToServer(caption);
         }
       });
 
