@@ -29,21 +29,21 @@ class InterviewExcerpt(BaseModel):
     text: str
 
 
-# pusher_client = pusher.Pusher(
-#     app_id="1793970",
-#     key="22266158fe1cbe76cc85",
-#     secret="08d985e9e6e0a2f8fb86",
-#     cluster="us2",
-#     ssl=True,
-# )
-
 pusher_client = pusher.Pusher(
-    app_id=os.getenv("PUSHER_APP_ID"),
-    key=os.getenv("PUSHER_KEY"),
-    secret=os.getenv("PUSHER_SECRET"),
-    cluster=os.getenv("PUSHER_CLUSTER"),
+    app_id="1793970",
+    key="22266158fe1cbe76cc85",
+    secret="08d985e9e6e0a2f8fb86",
+    cluster="us2",
     ssl=True,
 )
+
+# pusher_client = pusher.Pusher(
+#     app_id=os.getenv("PUSHER_APP_ID"),
+#     key=os.getenv("PUSHER_KEY"),
+#     secret=os.getenv("PUSHER_SECRET"),
+#     cluster=os.getenv("PUSHER_CLUSTER"),
+#     ssl=True,
+# )
 
 
 # Make sure to include the origins you want to allow. Use ["*"] to allow all origins.
@@ -74,6 +74,7 @@ async def read_root():
 
 @app.post("/analyze-text/")
 async def analyze_text(excerpt: InterviewExcerpt):
+    print("receiving!!!" + excerpt.text)
     analysis_result = analyze_excerpt(excerpt.text)  # Your analysis function
     # Trigger a Pusher event
     print("analysis_result" + "hey its working")

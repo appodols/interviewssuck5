@@ -209,6 +209,7 @@ const sendTranscriptionToServer = async (transcriptionText) => {
           .join(" ");
         if (caption !== "") {
           setCaption(caption);
+          console.log('sending to fastAPI');
           sendTranscriptionToServer(caption);
         }
       });
