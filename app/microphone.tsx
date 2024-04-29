@@ -95,59 +95,29 @@ export default function Microphone() {
   // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
 
 
-  // useEffect(() => {
-  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
-  //       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-  //       encrypted: true
-  //   });
+  useEffect(() => {
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+        encrypted: true
+    });
   
-  //   console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
-  //   console.log('Pusher initiated!');
-  //   const channel = pusher.subscribe('my-channel');
+    console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+    console.log('Pusher initiated!');
+    const channel = pusher.subscribe('my-channel');
 
-  //   channel.bind('new-analysis', function (data) {
-  //       console.log(data)
-  //       setExtractedQuestion(data.message);
-  //   });
+    channel.bind('new-analysis', function (data) {
+      console.log("logging return from pusher");
+      console.log(data)
+      console.log(data['pusher message'].interview_question);
+      setExtractedQuestion(data['pusher message'].interview_question);
+      console.log('Extracted Question:', extractedQuestion);
+    });
   
-  //   return () => {
-  //       channel.unbind_all();
-  //       channel.unsubscribe();
-  //   };
-  // }, []);
-
-  // const websocketURL = process.env.NODE_ENV === 'development'
-  // ? 'ws://127.0.0.1:8000/listen'  // Development WebSocket URL
-  // : 'wss://interviewbasic.vercel.app/ws';  // Production WebSocket URL
-
-  // const { sendMessage, lastMessage, readyState } = useWebSocket(websocketURL, {
-  //   onOpen: () => console.log("fastAPIWebSocket Connected"),
-  //   onClose: () => console.log("fastAPI WebSocket Disconnected"),
-  //   onMessage: (event) => {
-  //     console.log("Received message:", event.data);  // Log received message as plain text
-  //     // Directly check if the data is not an empty string
-  //     if (event.data !== "") {
-  //       setExtractedQuestion(event.data);
-  //     }
-  //   },
-  //   shouldReconnect: (closeEvent) => true, // Always attempt to reconnect
-  //   reconnectInterval: 3000, // Attempts to reconnect every 3 seconds
-  //   onError: (error) => {
-  //       console.error('WebSocket Error:', error);  // Log errors
-  //   }
-  // });
-  
-  
-
-// // Example event handler for sending transcription to WebSocket
-// const handleTranscription = (transcription: string) => {
-//   console.log('transcriptio sending to fastAPI')
-//   if (readyState === WebSocket.OPEN) {
-//     sendMessage(transcription);  // Send the transcription text
-//   } else {
-//     console.log('WebSocket is not open. ReadyState:', readyState);
-//   }
-// };
+    return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+    };
+  }, []);
 
 const sendTranscriptionToServer = async (transcriptionText) => {
   try {
