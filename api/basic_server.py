@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 import os
 
-# print("Current working directory:12345", os.getcwd())
+print("Current working directory:12345", os.getcwd())
 # from fastapi.templating import Jinja2Templates
 from typing import Dict, Callable
 from deepgram import Deepgram
@@ -74,10 +74,10 @@ async def read_root():
 
 @app.post("/analyze-text/")
 async def analyze_text(excerpt: InterviewExcerpt):
-    print("receiving!!!" + excerpt.text)
+    # print("receiving!!!" + excerpt.text)
     analysis_result = analyze_excerpt(excerpt.text)  # Your analysis function
     # Trigger a Pusher event
-    print("analysis_result" + "hey its working")
+    print(f"{analysis_result} - Hey, it's working!")
     # pusher_client.trigger("my-channel", "new-analysis", {"message": analysis_result})
     return {"message": "Analysis sent"}
 

@@ -10,33 +10,32 @@ const nextConfig = {
     return config;
   },
   
-  // Include rewrites to manage API redirections for FastAPI in development and production
-  rewrites: async () => {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 
-          process.env.NODE_ENV === 'development'
-          ? 'http://127.0.0.1:8000/api/:path*'
-          : 'https://interviewbasic.vercel.app/api/:path*',
-      },
-      {
-        source: '/docs',
-        destination:
-          process.env.NODE_ENV === 'development'
-          ? 'http://127.0.0.1:8000/docs'
-          : 'https://interviewbasic.vercel.app/docs',
-      },
-      {
-        source: '/openapi.json',
-        destination:
-          process.env.NODE_ENV === 'development'
-          ? 'http://127.0.0.1:8000/openapi.json'
-          : 'https://interviewbasic.vercel.app/openapi.json',
-      },
-    ];
-  },
-
+ // Include rewrites to manage API redirections for FastAPI in development and production
+rewrites: async () => {
+  return [
+    {
+      source: '/api/:path*',
+      destination: 
+        process.env.NODE_ENV === 'development'
+        ? 'http://127.0.0.1:8000/:path*'
+        : 'https://interviewbasic.vercel.app/:path*',
+    },
+    {
+      source: '/docs',
+      destination:
+        process.env.NODE_ENV === 'development'
+        ? 'http://127.0.0.1:8000/docs'
+        : 'https://interviewbasic.vercel.app/docs',
+    },
+    {
+      source: '/openapi.json',
+      destination:
+        process.env.NODE_ENV === 'development'
+        ? 'http://127.0.0.1:8000/openapi.json'
+        : 'https://interviewbasic.vercel.app/openapi.json',
+    },
+  ];
+},
   // Set reactStrictMode according to the existing setting from the Deepgram project
   reactStrictMode: false,
 };
