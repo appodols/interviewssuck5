@@ -119,7 +119,7 @@ export default function Microphone() {
     };
   }, []);
 
-const sendTranscriptionToServer = async (transcriptionText) => {
+const sendTranscriptionToServer = async (transcriptionText: string) => {
   try {
     const response = await fetch('http://localhost:8000/analyze-text/', { // Updated endpoint
       method: 'POST',
@@ -141,14 +141,7 @@ const sendTranscriptionToServer = async (transcriptionText) => {
   }
 };
 
-  
-  
 
-  
-  
-  
-  
-  
 
   useEffect(() => {
     if (apiKey && "key" in apiKey) {
