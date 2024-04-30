@@ -21,7 +21,8 @@ import { data } from "autoprefixer";
 
 export default function Microphone() {
   const { add, remove, first, size, queue } = useQueue<any>([]);
-  const [apiKey, setApiKey] = useState<CreateProjectKeyResponse | null>();
+  // const [apiKey, setApiKey] = useState<CreateProjectKeyResponse | null>();
+  const [apiKey, setApiKey] = useState<string | null>(process.env.NEXT_DEEPGRAM_API_KEY || null);
   const [connection, setConnection] = useState<LiveClient | null>();
   const [isListening, setListening] = useState(false);
   const [isLoadingKey, setLoadingKey] = useState(true);
@@ -68,26 +69,24 @@ export default function Microphone() {
     }
   }, [add, microphone, userMedia]);
 
-  //this is a function for adding the microphone??
 
+  // useEffect(() => {
+  //   // console.log(apiKey + "wtf")
+  //   if (!apiKey) {
+  //     console.log("getting a new api key");
+  //     fetch("/api", { cache: "no-store" })
+  //       .then((res) => res.json())
+  //       .then((object) => {
+  //         if (!("key" in object)) throw new Error("No api key returned");
 
-  useEffect(() => {
-    // console.log(apiKey + "wtf")
-    if (!apiKey) {
-      console.log("getting a new api key");
-      fetch("/api", { cache: "no-store" })
-        .then((res) => res.json())
-        .then((object) => {
-          if (!("key" in object)) throw new Error("No api key returned");
-
-          setApiKey(object);
-          setLoadingKey(false);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    }
-  }, [apiKey]);
+  //         setApiKey(object);
+  //         setLoadingKey(false);
+  //       })
+  //       .catch((e) => {
+  //         console.error(e);
+  //       });
+  //   }
+  // }, [apiKey]);
 
   // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
   // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
