@@ -89,11 +89,10 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
-  // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
-  // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
-  // // console.log('Pusher App Key:', process.env.PUSHER_APP_ID);
-  // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
-
+  console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
+  console.log('Pusher App Key Cluster', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
+  // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER); ')
+  
 
   useEffect(() => {
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
