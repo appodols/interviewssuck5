@@ -74,7 +74,7 @@ export default function Microphone() {
   useEffect(() => {
     // console.log(apiKey + "wtf")
     if (!apiKey) {
-      console.log("getting a new api key");
+      // console.log("getting a new api key");
       fetch("/api", { cache: "no-store" })
         .then((res) => res.json())
         .then((object) => {
@@ -89,18 +89,24 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
-  console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
-  console.log('Pusher App Key Cluster', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
+  const PUBLIC_PUSHER_APP_KEY = '22266158fe1cbe76cc8';
+  const PUBLIC_PUSHER_CLUSTER = 'us2'
+  //yes I'm an asshole for hardcoding this but fucking sue me
+    
+
+  // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
+    //I think this prints out as undefined because it's n
+  // console.log('Pusher App Key Cluster', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
   // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER); ')
   
 
   useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+    const pusher = new Pusher(PUBLIC_PUSHER_APP_KEY, {
+        cluster: PUBLIC_PUSHER_CLUSTER,
         encrypted: true
     });
   
-    console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+    // console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
     console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
@@ -141,14 +147,6 @@ const sendTranscriptionToServer = async (transcriptionText) => {
 };
 
   
-  
-
-  
-  
-  
-  
-  
-
   useEffect(() => {
     if (apiKey && "key" in apiKey) {
       console.log("connecting to deepgram");
