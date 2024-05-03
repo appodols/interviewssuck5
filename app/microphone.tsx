@@ -102,8 +102,7 @@ export default function Microphone() {
 
   useEffect(() => {
     const pusher = new Pusher(PUBLIC_PUSHER_APP_KEY, {
-        cluster: PUBLIC_PUSHER_CLUSTER,
-        encrypted: true
+        cluster: PUBLIC_PUSHER_CLUSTER
     });
   
     // console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
