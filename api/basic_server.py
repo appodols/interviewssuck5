@@ -10,7 +10,6 @@ import os
 # print("Current working directory:12345", os.getcwd())
 # from fastapi.templating import Jinja2Templates
 from typing import Dict, Callable
-from deepgram import Deepgram
 from dotenv import load_dotenv
 
 # from test import factorial
