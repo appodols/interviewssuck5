@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   // gotta use the request object to invalidate the cache every request :vomit:
   const url = request.url;
+  console.log(url + " is the url");
   const deepgram = createClient(process.env.DEEPGRAM_API_KEY ?? "");
 
   let { result: projectsResult, error: projectsError } =
