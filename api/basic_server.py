@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # from api.chat_with_felix_groq import analyze_excerpt
 
-from chat_with_felix_groq import analyze_excerpt
+from api.chat_with_felix_groq import analyze_excerpt
 from pydantic import BaseModel
 
 # import os

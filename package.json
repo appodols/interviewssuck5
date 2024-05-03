@@ -3,15 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "activate-venv": ". venv/bin/activate",
-    "fastapi-dev": "source venv/bin/activate && pip3 install -r requirements.txt && python3 -m uvicorn api.basic_server:app --reload",
+    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn api.basic_server:app --reload",
     "next-dev": "next dev",
     "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "start:staging": "env-cmd -f .env.staging react-scripts start"
-    
     
   },
   "dependencies": {
