@@ -83,7 +83,7 @@ async def analyze_text(excerpt: InterviewExcerpt):
     pusher_client.trigger(
         "my-channel", "new-analysis", {"pusher message": analysis_result}
     )
-    return {"return message": "Analysis sent"}
+    return {"return message": analysis_result}
 
 
 @app.websocket("/listen")
