@@ -1,12 +1,13 @@
-from fastapi import FastAPI
+from http.server import BaseHTTPRequestHandler
 
-from test import factorial
-from chat_with_felix_groq import analyze_excerpt
-from groq import Groq
-
-app = FastAPI()
+# the point of this is to test basic shit
 
 
-@app.get("/api/python")
-def hello_world():
-    return {"message": "Hello World"}
+class handler(BaseHTTPRequestHandler):
+
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain")
+        self.end_headers()
+        self.wfile.write("Hello, world!".encode("utf-8"))
+        return
