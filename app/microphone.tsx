@@ -122,7 +122,7 @@ export default function Microphone() {
       console.log(data)
       console.log(data['pusher message'].interview_question);
       setExtractedQuestion(data['pusher message'].interview_question);
-      console.log('Extracted Question:', extractedQuestion);
+      console.log('Extracted Questions:', extractedQuestion);
     });
   
     return () => {
