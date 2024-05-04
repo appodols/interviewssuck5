@@ -117,7 +117,7 @@ export default function Microphone() {
     const channel = pusher.subscribe('my-channel');
 
    
-    channel.bind('new-analysis', function (data: AnalysisData)) {
+    channel.bind('new-analysis', function (data: AnalysisData) {
       console.log("logging return from pusher");
       console.log(data)
       console.log(data['pusher message'].interview_question);
