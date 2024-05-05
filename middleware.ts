@@ -37,7 +37,8 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   // Allowed origins check
-  const origin = request.headers.get("origin") ?? "";
+    const origin = request.headers.get("origin") ?? "";
+    console.log("Incoming request from origin:", origin);
   if (
     corsOptions.allowedOrigins.includes("*") ||
     corsOptions.allowedOrigins.includes(origin)
