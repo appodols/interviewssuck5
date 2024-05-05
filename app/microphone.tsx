@@ -91,7 +91,7 @@ export default function Microphone() {
 
   // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
   // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
-  // // console.log('Pusher App Key:', process.env.PUSHER_APP_ID);
+  // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
   // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
 
   const PUBLIC_PUSHER_APP_KEY = '22266158fe1cbe76cc8';
@@ -102,7 +102,7 @@ export default function Microphone() {
         cluster: PUBLIC_PUSHER_CLUSTER
     });
   
-    // console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+    // console.log('process.env.NEXT_PUBLICs_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
     console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
