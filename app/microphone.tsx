@@ -44,7 +44,7 @@ export default function Microphone() {
 
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
-    production: 'http://localhost:3000/api/analyze-text/'
+    production: 'https://interviewbasic.vercel.app/api/analyze-text/'
   }
 
   const isBrowser = typeof window !== "undefined";
