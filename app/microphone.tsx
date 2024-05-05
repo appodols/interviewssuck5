@@ -42,6 +42,15 @@ export default function Microphone() {
   const [extractedQuestion, setExtractedQuestion] = useState<string>('');
 
 
+  const API_ENDPOINTS = {
+    development: 'http://localhost:8000/analyze-text/',
+    production: 'http://localhost:3000/api/analyze-text/'
+  }
+
+  const isBrowser = typeof window !== "undefined";
+  const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
+    API_ENDPOINTS.development : API_ENDPOINTS.production;
+console.log('API Endpoint is set to:', apiEndpoint);
   //setup all this stuff in state
 
 
@@ -130,7 +139,7 @@ export default function Microphone() {
 
 const sendTranscriptionToServer = async (transcriptionText: string) => {
   try {
-    const response = await fetch('http://localhost:8000/analyze-text/', { // Updated endpoint
+    const response = await fetch(apiEndpoint, { // Updated endpoint
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
