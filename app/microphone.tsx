@@ -19,6 +19,14 @@ import { data } from "autoprefixer";
 
 //useState, useEffect etc
 
+
+// Interface definition
+interface AnalysisData {
+  'pusher message': {
+      interview_question: string;
+  };
+}
+
 export default function Microphone() {
   const { add, remove, first, size, queue } = useQueue<any>([]);
   const [apiKey, setApiKey] = useState<CreateProjectKeyResponse | null>();
@@ -106,7 +114,7 @@ export default function Microphone() {
     console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
-    channel.bind('new-analysis', function (data) {
+    channel.bind('new-analysis', function (data: AnalysisData) {
       console.log("logging return from pusher");
       console.log(data)
       console.log(data['pusher message'].interview_question);
