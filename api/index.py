@@ -2,6 +2,8 @@ from http.server import BaseHTTPRequestHandler
 
 # the point of this is to test basic shit
 
+print("reading index")
+
 
 class handler(BaseHTTPRequestHandler):
 
