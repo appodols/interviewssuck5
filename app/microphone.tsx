@@ -191,7 +191,7 @@ const sendTranscriptionToServer = async (transcriptionText: string) => {
         if (caption !== "") {
           setCaption(caption);
           console.log('sending to fastAPI');
-          sendTranscriptionToServer(caption);
+          // sendTranscriptionToServer(caption);
         }
       });
 
@@ -199,6 +199,8 @@ const sendTranscriptionToServer = async (transcriptionText: string) => {
       setLoading(false);
     }
   }, [apiKey]);
+
+  sendTranscriptionToServer("what are your strengths as a designer?");
 
   useEffect(() => {
     const processQueue = async () => {
