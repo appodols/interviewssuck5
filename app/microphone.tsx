@@ -40,13 +40,13 @@ export default function Microphone() {
   const [userMedia, setUserMedia] = useState<MediaStream | null>();
   const [caption, setCaption] = useState<string | null>();
   const [extractedQuestion, setExtractedQuestion] = useState<string>('');
+  const [hasTranscriptionBeenSent, setHasTranscriptionBeenSent] = useState(false);
 
 
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
     production: 'https://interviewbasic.vercel.app/api/analyze-text'
   }
-
   const isBrowser = typeof window !== "undefined";
   const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
     API_ENDPOINTS.development : API_ENDPOINTS.production;
@@ -191,7 +191,10 @@ const sendTranscriptionToServer = async (transcriptionText: string) => {
         if (caption !== "") {
           setCaption(caption);
           console.log('sending to fastAPI');
-          // sendTranscriptionToServer(caption);
+          if (!hasTranscriptionBeenSent) {
+            sendTranscriptionToServer(caption);
+            setHasTranscriptionBeenSent(true);
+          }
         }
       });
 
@@ -200,7 +203,7 @@ const sendTranscriptionToServer = async (transcriptionText: string) => {
     }
   }, [apiKey]);
 
-  sendTranscriptionToServer("what are your strengths as a designer?");
+  // sendTranscriptionToServer("what are your strengths as a designer?");
 
   useEffect(() => {
     const processQueue = async () => {
