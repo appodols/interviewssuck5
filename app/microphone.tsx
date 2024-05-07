@@ -137,7 +137,8 @@ export default function Microphone() {
     };
   }, []);
 
-const sendTranscriptionToServer = async (transcriptionText: string) => {
+  const sendTranscriptionToServer = async (transcriptionText: string) => {
+  console.log("send is called")
   try {
     const response = await fetch(apiEndpoint, { // Updated endpoint
       method: 'POST',
