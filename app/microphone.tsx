@@ -193,6 +193,7 @@ export default function Microphone() {
           setCaption(caption);
           console.log('sending to fastAPI');
           if (!hasTranscriptionBeenSent) {
+            console.log(hasTranscriptionBeenSent)
             sendTranscriptionToServer(caption);
             setHasTranscriptionBeenSent(true);
           }
@@ -202,7 +203,7 @@ export default function Microphone() {
       setConnection(connection);
       setLoading(false);
     }
-  }, [apiKey]);
+  }, [apiKey, hasTranscriptionBeenSent]);
 
   // sendTranscriptionToServer("what are your strengths as a designer?");
 
