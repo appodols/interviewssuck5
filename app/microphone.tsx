@@ -40,7 +40,7 @@ export default function Microphone() {
   const [userMedia, setUserMedia] = useState<MediaStream | null>();
   const [caption, setCaption] = useState<string | null>();
   const [extractedQuestion, setExtractedQuestion] = useState<string>('');
-  const [hasTranscriptionBeenSent, setHasTranscriptionBeenSent] = useState(false);
+  const [transcriptionsSent, setTranscriptionsSent] = useState(0);
 
 
   const API_ENDPOINTS = {
@@ -192,18 +192,17 @@ export default function Microphone() {
         if (caption !== "") {
           setCaption(caption);
           console.log('sending to fastAPI');
-          if (!hasTranscriptionBeenSent) {
-            console.log(hasTranscriptionBeenSent)
+          if (transcriptionsSent === 0) {
+            console.log(transcriptionsSent)
             sendTranscriptionToServer(caption);
-            setHasTranscriptionBeenSent(true);
+            setTranscriptionsSent(prevCount => prevCount + 1)
           }
         }
       });
-
       setConnection(connection);
       setLoading(false);
     }
-  }, [apiKey, hasTranscriptionBeenSent]);
+  }, [apiKey, transcriptionsSent]);
 
   // sendTranscriptionToServer("what are your strengths as a designer?");
 
