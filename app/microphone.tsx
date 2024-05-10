@@ -224,7 +224,7 @@ const fetchIndexFromServer = async () => {
           console.log('sending to fastAPI');
           if (transcriptionsSent === 0) {
             console.log(transcriptionsSent)
-            sendTranscriptionToServer(caption);
+            // sendTranscriptionToServer(caption);
             fetchIndexFromServer();
             setTranscriptionsSent(prevCount => prevCount + 1)
           }
