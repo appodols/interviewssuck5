@@ -43,6 +43,11 @@ export default function Microphone() {
   const [transcriptionsSent, setTranscriptionsSent] = useState(0);
 
 
+  const INDEX_API_ENDPOINTS = {
+    development: 'http://localhost:8000/index',
+    production: 'https://interviewbasic.vercel.app/api/index'
+  }
+
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
     production: 'https://interviewbasic.vercel.app/api/analyze-text'
@@ -137,6 +142,31 @@ export default function Microphone() {
     };
   }, []);
 
+  // Function to send a GET request
+const fetchIndexFromServer = async () => {
+  console.log("fetchIndex is called");
+  try {
+    // Determine the environment and set the appropriate API endpoint
+    const apiEndpoint = process.env.NODE_ENV === 'development' ? INDEX_API_ENDPOINTS.development : INDEX_API_ENDPOINTS.production;
+
+    const response = await fetch(apiEndpoint, {
+      method: 'GET', // Change to GET method
+      headers: {
+        'accept': 'application/json', // Typically, you just need to set accept header for GET requests
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Fetch result:', result);
+  } catch (error) {
+    console.error('Error fetching index from server:', error);
+  }
+};
+
   const sendTranscriptionToServer = async (transcriptionText: string) => {
   console.log("send is called")
   try {
@@ -195,6 +225,7 @@ export default function Microphone() {
           if (transcriptionsSent === 0) {
             console.log(transcriptionsSent)
             sendTranscriptionToServer(caption);
+            fetchIndexFromServer();
             setTranscriptionsSent(prevCount => prevCount + 1)
           }
         }
