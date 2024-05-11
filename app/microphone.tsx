@@ -92,6 +92,16 @@ export default function Microphone() {
 
   //this is a function for adding the microphone??
 
+  // // Automatically start the microphone when component mounts
+  // useEffect(() => {
+  //   toggleMicrophone();
+  //   return () => {
+  //     // Clean up microphone when component unmounts
+  //     // if (microphone) {
+  //     //   microphone.stop();
+  //     // }
+  //   };
+  // }, [toggleMicrophone]);
 
   useEffect(() => {
     // console.log(apiKey + "wtf")
@@ -269,24 +279,6 @@ const fetchIndexFromServer = async () => {
     <div className="w-full relative">
       <div>{extractedQuestion}</div>
       <div className="mt-10 flex flex-col align-middle items-center">
-        {!!userMedia && !!microphone && micOpen ? (
-          <Image
-            src="/speak.png"
-            width="168"
-            height="129"
-            alt="Deepgram Logo"
-            priority
-          />
-        ) : (
-          <Image
-            src="/click.png"
-            width="168"
-            height="129"
-            alt="Deepgram Logo"
-            priority
-          />
-        )}
-
         <button className="w-24 h-24" onClick={() => toggleMicrophone()}>
           <Recording
             width="96"
@@ -298,28 +290,6 @@ const fetchIndexFromServer = async () => {
             }
           />
         </button>
-        <div className="mt-20 p-6 text-xl text-center">
-          {caption && micOpen
-            ? caption
-            : "** Realtime transcription by Deepgram **"}
-        </div>
-      </div>
-      <div
-        className="z-20 text-white flex shrink-0 grow-0 justify-around items-center 
-                  fixed bottom-0 right-5 rounded-lg mr-1 mb-5 lg:mr-5 lg:mb-5 xl:mr-10 xl:mb-10 gap-5"
-      >
-        <span className="text-sm text-gray-400">
-          {isListening
-            ? "Deepgram connection open!"
-            : "Deepgram is connecting..."}
-        </span>
-        <Dg
-          width="30"
-          height="30"
-          className={
-            isListening ? "fill-white drop-shadow-glowBlue" : "fill-gray-600"
-          }
-        />
       </div>
     </div>
   );
