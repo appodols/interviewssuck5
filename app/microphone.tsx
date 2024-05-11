@@ -140,7 +140,7 @@ export default function Microphone() {
 
     channel.bind('new-analysis', function (data: AnalysisData) {
       console.log("logging return from pusher");
-      console.log(data)
+      // console.log(data)
       console.log(data['pusher message'].interview_question);
       setExtractedQuestion(data['pusher message'].interview_question);
       console.log('Extracted Question:', extractedQuestion);
@@ -178,7 +178,7 @@ const fetchIndexFromServer = async () => {
 };
 
   const sendTranscriptionToServer = async (transcriptionText: string) => {
-  console.log("send is called")
+  // console.log("send is called")
   try {
     const response = await fetch(apiEndpoint, { // Updated endpoint
       method: 'POST',
@@ -194,7 +194,7 @@ const fetchIndexFromServer = async () => {
     }
 
     const result = await response.json();
-    console.log('Analysis result:', result);
+    // console.log('Analysis result:', result);
   } catch (error) {
     console.error('Error sending transcription to server:', error);
   }
@@ -204,7 +204,7 @@ const fetchIndexFromServer = async () => {
 
   useEffect(() => {
     if (apiKey && "key" in apiKey) {
-      console.log("connecting to deepgram");
+      // console.log("connecting to deepgram");
       const deepgram = createClient(apiKey?.key ?? "");
       const connection = deepgram.listen.live({
         model: "nova",
@@ -213,12 +213,12 @@ const fetchIndexFromServer = async () => {
       });
 
       connection.on(LiveTranscriptionEvents.Open, () => {
-        console.log("deepgram connection established");
+        // console.log("deepgram connection established");
         setListening(true);
       });
 
       connection.on(LiveTranscriptionEvents.Close, () => {
-        console.log(" deepgram connection closed");
+        // console.log(" deepgram connection closed");
         setListening(false);
         setApiKey(null);
         setConnection(null);
@@ -232,12 +232,13 @@ const fetchIndexFromServer = async () => {
         if (caption !== "") {
           setCaption(caption);
           console.log('sending to fastAPI');
-          if (transcriptionsSent === 0) {
-            console.log(transcriptionsSent)
-            // sendTranscriptionToServer(caption);
-            fetchIndexFromServer();
-            setTranscriptionsSent(prevCount => prevCount + 1)
-          }
+          sendTranscriptionToServer(caption);
+          // if (transcriptionsSent === 0) {
+          //   console.log(transcriptionsSent)
+          //   // sendTranscriptionToServer(caption);
+          //   fetchIndexFromServer();
+          //   setTranscriptionsSent(prevCount => prevCount + 1)
+          // }
         }
       });
       setConnection(connection);
@@ -277,20 +278,18 @@ const fetchIndexFromServer = async () => {
 
   return (
     <div className="w-full relative">
-      <div>{extractedQuestion}</div>
-      <div className="mt-10 flex flex-col align-middle items-center">
-        <button className="w-24 h-24" onClick={() => toggleMicrophone()}>
-          <Recording
-            width="96"
-            height="96"
-            className={
-              `cursor-pointer` + !!userMedia && !!microphone && micOpen
-                ? "fill-red-400 drop-shadow-glowRed"
-                : "fill-gray-600"
-            }
-          />
-        </button>
-      </div>
+  <div className="mt-10 flex flex-col align-middle items-center bg-[#DB5A30]">
+    <div className="text-center text-white font-[Microsoft_Sans_Serif] text-xl mb-4">
+      Current question: {extractedQuestion || 'question here'}
     </div>
+    <button className="w-24 h-24" onClick={() => toggleMicrophone()}>
+      <Recording
+        width="96"
+        height="96"
+        className={`cursor-pointer ${!!userMedia && !!microphone && micOpen ? "fill-red-400 drop-shadow-glowRed" : "fill-gray-600"}`}
+      />
+    </button>
+  </div>
+</div>
   );
 }

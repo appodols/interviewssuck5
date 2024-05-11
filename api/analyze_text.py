@@ -27,7 +27,7 @@ def analyze_text(excerpt):
     pusher_client.trigger(
         "my-channel", "new-analysis", {"pusher message": analysis_result}
     )
-    return {"return message": "Analysis sent"}
+    return {"return message": analysis_result}
 
 
 class handler(BaseHTTPRequestHandler):

@@ -76,11 +76,11 @@ async def analyze_text(excerpt: InterviewExcerpt):
     # print("receiving!!!" + excerpt.text)
     analysis_result = analyze_excerpt(excerpt.text)  # Your analysis function
     # Trigger a Pusher event
-    print(f"{analysis_result} - Hey, it's working!")
+    # print(f"{analysis_result} - Hey, it's working!")
     pusher_client.trigger(
         "my-channel", "new-analysis", {"pusher message": analysis_result}
     )
-    return {"return message": "Analysis sent"}
+    return {"return message": analysis_result}
 
 
 @app.websocket("/listen")
