@@ -121,24 +121,17 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
-  // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
-  // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
-  // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
-  // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
-
-  const PUBLIC_PUSHER_APP_KEY = '22266158fe1cbe76cc8';
-  const PUBLIC_PUSHER_CLUSTER = 'us2'
-
   useEffect(() => {
-    const pusher = new Pusher(PUBLIC_PUSHER_APP_KEY, {
-        cluster: PUBLIC_PUSHER_CLUSTER
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+        encrypted: true
     });
   
-    // console.log('process.env.NEXT_PUBLICs_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+    console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
     console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
-    channel.bind('new-analysis', function (data: AnalysisData) {
+    channel.bind('new-analysis', function (data) {
       console.log("logging return from pusher");
       // console.log(data)
       console.log(data['pusher message'].interview_question);
@@ -151,6 +144,38 @@ export default function Microphone() {
         channel.unsubscribe();
     };
   }, []);
+
+
+  // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
+  // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
+  // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
+  // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
+
+  // const PUBLIC_PUSHER_APP_KEY = '22266158fe1cbe76cc8';
+  // const PUBLIC_PUSHER_CLUSTER = 'us2'
+
+  // useEffect(() => {
+  //   const pusher = new Pusher(PUBLIC_PUSHER_APP_KEY, {
+  //       cluster: PUBLIC_PUSHER_CLUSTER
+  //   });
+  
+  //   // console.log('process.env.NEXT_PUBLICs_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+  //   console.log('Pusher initiated!');
+  //   const channel = pusher.subscribe('my-channel');
+
+  //   channel.bind('new-analysis', function (data) {
+  //     console.log("logging return from pusher");
+  //     // console.log(data)
+  //     console.log(data['pusher message'].interview_question);
+  //     setExtractedQuestion(data['pusher message'].interview_question);
+  //     console.log('Extracted Question:', extractedQuestion);
+  //   });
+  
+  //   return () => {
+  //       channel.unbind_all();
+  //       channel.unsubscribe();
+  //   };
+  // }, []);
 
   // Function to send a GET request
 const fetchIndexFromServer = async () => {
