@@ -126,6 +126,7 @@ export default function Microphone() {
         cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
         encrypted: true
     });
+    //note, you need to do some environemntal var stuff to get it to work in vercel
   
     console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
     console.log('Pusher initiated!');
