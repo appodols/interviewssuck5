@@ -45,12 +45,12 @@ export default function Microphone() {
 
   const INDEX_API_ENDPOINTS = {
     development: 'http://localhost:8000/index',
-    production: 'https://interviewbasic.vercel.app/api/index'
+    production: `https://${process.env.VERCEL_BRANCH_URL}/api/index`
   }
 
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
-    production: 'https://interviewbasic.vercel.app/api/analyze-text'
+    production: `https://${process.env.VERCEL_BRANCH_URL}/api/analyze-text`
   }
   const isBrowser = typeof window !== "undefined";
   const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
