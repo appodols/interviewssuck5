@@ -222,12 +222,17 @@ const fetchIndexFromServer = async () => {
         if (caption !== "") {
           setCaption(caption);
           console.log('sending to fastAPI');
-          if (transcriptionsSent === 0) {
-            console.log(transcriptionsSent)
-            // sendTranscriptionToServer(caption);
-            fetchIndexFromServer();
-            setTranscriptionsSent(prevCount => prevCount + 1)
-          }
+          sendTranscriptionToServer(caption);
+
+          //1) said, I will only send it once with a counter to avoid looping and see if that solves it
+          //2) I willl send a different request, ie fetchIndex to see if it is the location of the request
+          //or the request itself, that is causing the looping error 
+          // if (transcriptionsSent === 0) {
+          //   console.log(transcriptionsSent)
+          //   // sendTranscriptionToServer(caption);
+          //   fetchIndexFromServer();
+          //   setTranscriptionsSent(prevCount => prevCount + 1)
+          // }
         }
       });
       setConnection(connection);
