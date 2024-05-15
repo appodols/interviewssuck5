@@ -45,12 +45,12 @@ export default function Microphone() {
 
   const INDEX_API_ENDPOINTS = {
     development: 'http://localhost:8000/index',
-    production: `https://${process.env.VERCEL_BRANCH_URL}/api/index`
+    production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/index`
   }
 
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
-    production: `https://${process.env.VERCEL_BRANCH_URL}/api/analyze-text`
+    production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/analyze-text`
   }
   const isBrowser = typeof window !== "undefined";
   const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
@@ -168,7 +168,8 @@ const fetchIndexFromServer = async () => {
 };
 
   const sendTranscriptionToServer = async (transcriptionText: string) => {
-  console.log("send is called")
+    console.log("send is called")
+  //note, hardcoding 
   try {
     const response = await fetch(apiEndpoint, { // Updated endpoint
       method: 'POST',
@@ -241,7 +242,6 @@ const fetchIndexFromServer = async () => {
   }, [apiKey, transcriptionsSent]);
 
   // sendTranscriptionToServer("what are your strengths as a designer?");
-
   useEffect(() => {
     const processQueue = async () => {
       if (size > 0 && !isProcessing) {
