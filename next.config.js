@@ -10,7 +10,8 @@ const nextConfig = {
     return config;
   },
   
- // Include rewrites to manage API redirections for FastAPI in development and production
+  // Include rewrites to manage API redirections for FastAPI in development and production
+  //note, I may need to change the interpolation to work here as well
 rewrites: async () => {
   return [
     {

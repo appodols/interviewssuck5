@@ -77,21 +77,22 @@ def analyze_excerpt(excerpt, testing=False):
             top_p=1,
         )
         content_string = chat_completion.choices[0].message.content
-        print(content_string)
+        # print("content string here")
+        # print(content_string)
 
-        # Regex to find the interview question
         interview_question_match = re.search(
-            r"Interview question: '([^']+)'", content_string
+            r'"interview_question":\s*"([^"]+)"', content_string
         )
-
-        # print("Interview question MATCH")
-        print(interview_question_match)
-
         # Extract the groups from the matches if they exist
         interview_question = (
             interview_question_match.group(1) if interview_question_match else ""
         )
 
+        if interview_question != "":
+            provide_recommendation(interview_question)
+
+        # print("interview_question ")
+        # print(interview_question)
         return {"interview_question": interview_question}
     except Exception as e:
         return {"interview_question": "", "reasoning": f"Error occurred: {str(e)}"}
@@ -99,6 +100,7 @@ def analyze_excerpt(excerpt, testing=False):
 
 def provide_recommendation(excerpt, testing=False):
     # Assuming you have set GROQ_API_KEY in your environment variables
+    print("recommending")
     client = get_groq_client()
     try:
         chat_completion = client.chat.completions.create(
@@ -108,6 +110,10 @@ def provide_recommendation(excerpt, testing=False):
                 #     "role": "system",
                 #     "content": "You will not make questions up unless there is direct evidence of the question from the excerpt",
                 # },
+                {
+                    "role": "system",
+                    "content": "Your content will be a JSON object with the key 'answer recommendation' and the key being a string containing 4 bulleted suggestions",
+                },
                 {
                     "role": "system",
                     "content": "You are assistating in a technical interview for a product-management role.  You will be given the value of the current interview question. You will recommend in bullets how the interview should answer the question",
@@ -129,27 +135,19 @@ def provide_recommendation(excerpt, testing=False):
         # Accessing the content string
         # Get the content string from the message
         content_string = chat_completion.choices[0].message.content
-        print("CONTENT STRING")
-        print(content_string)
-        # Use regex to find the interview_question and reasoning within the string
-        interview_question_match = re.search(
-            r'"interview_question":\s*"(.*?)"', content_string
+        # print("CONTENT STRING")
+        # print(content_string)
+        answer_recommendation_match = re.search(
+            r'"answer recommendation":\s*"([^"]+)"', content_string
         )
-
-        # print("intervire question")
-        # print(interview_question_match)
-
-        reasoning_match = re.search(r'"reasoning":\s*"(.*?)"', content_string)
-
-        # Extract the groups from the matches if they exist
-        # interview_question = (
-        #     interview_question_match.group(1) if interview_question_match else ""
-        # )
-        reasoning = reasoning_match.group(1) if reasoning_match else ""
-
-        return {"interview_question": interview_question_match}
+        # Extract the answer recommendation from the matches if they exist
+        answer_recommendation = (
+            answer_recommendation_match.group(1) if answer_recommendation_match else ""
+        )
+        print({"answer_recommendation": answer_recommendation})
+        return {"answer_recommendation": answer_recommendation}
     except Exception as e:
-        return {"interview_question": "", "reasoning": f"Error occurred: {str(e)}"}
+        return {"answer_recommendation": "", "reasoning": f"Error occurred: {str(e)}"}
 
 
 def main():
@@ -165,7 +163,7 @@ def main():
 
     if args.command == "analyze":
         result = analyze_excerpt(args.excerpt)
-        # print(result)
+        print(result)
     elif args.command == "recommend":
         result = provide_recommendation(args.excerpt)
         print(result)
