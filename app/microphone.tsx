@@ -48,7 +48,7 @@ export default function Microphone() {
     production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/index`
   }
 
-  console.log('process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL:', process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL);
+  // console.log('process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL:', process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL);
 
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
@@ -98,7 +98,7 @@ export default function Microphone() {
   useEffect(() => {
     // console.log(apiKey + "wtf")
     if (!apiKey) {
-      console.log("getting a new api key");
+      // console.log("getting a new api key");
       fetch("/api", { cache: "no-store" })
         .then((res) => res.json())
         .then((object) => {
@@ -127,15 +127,15 @@ export default function Microphone() {
     });
   
     // console.log('process.env.NEXT_PUBLICs_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
-    console.log('Pusher initiated!');
+    // console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
     channel.bind('new-analysis', function (data: AnalysisData) {
       console.log("logging return from pusher");
       console.log(data)
-      console.log(data['pusher message'].interview_question);
-      setExtractedQuestion(data['pusher message'].interview_question);
-      console.log('Extracted Question:', extractedQuestion);
+      // console.log(data['pusher message'].interview_question);
+      // setExtractedQuestion(data['pusher message'].interview_question);
+      // console.log('Extracted Question:', extractedQuestion);
     });
   
     return () => {
@@ -197,7 +197,7 @@ const fetchIndexFromServer = async () => {
 
   useEffect(() => {
     if (apiKey && "key" in apiKey) {
-      console.log("connecting to deepgram");
+      // console.log("connecting to deepgram");
       const deepgram = createClient(apiKey?.key ?? "");
       const connection = deepgram.listen.live({
         model: "nova",
@@ -206,12 +206,12 @@ const fetchIndexFromServer = async () => {
       });
 
       connection.on(LiveTranscriptionEvents.Open, () => {
-        console.log("deepgram connection established");
+        // console.log("deepgram connection established");
         setListening(true);
       });
 
       connection.on(LiveTranscriptionEvents.Close, () => {
-        console.log(" deepgram connection closed");
+        // console.log(" deepgram connection closed");
         setListening(false);
         setApiKey(null);
         setConnection(null);
