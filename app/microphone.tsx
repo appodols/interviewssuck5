@@ -48,6 +48,8 @@ export default function Microphone() {
     production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/index`
   }
 
+  console.log('process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL:', process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL);
+
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
     production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/analyze-text`
