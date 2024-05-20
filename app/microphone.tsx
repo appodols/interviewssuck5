@@ -225,7 +225,8 @@ const fetchIndexFromServer = async () => {
         if (caption !== "") {
           setCaption(caption);
           console.log('sending to fastAPI');
-          sendTranscriptionToServer(caption);
+          fetchIndexFromServer();
+          // sendTranscriptionToServer(caption);
 
           //1) said, I will only send it once with a counter to avoid looping and see if that solves it
           //2) I willl send a different request, ie fetchIndex to see if it is the location of the request
