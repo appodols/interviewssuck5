@@ -19,8 +19,7 @@ rewrites: async () => {
       destination: 
         process.env.NODE_ENV === 'development'
         ? 'http://127.0.0.1:8000/:path*'
-        : 'https://interviewbasic.vercel.app/:path*',
-    },
+        :  '/api/:path*',    },
     {
       source: '/docs',
       destination:
