@@ -78,7 +78,7 @@ export default function Microphone() {
 
       microphone.onstart = () => {
         setMicOpen(true);
-        console.log("mic on")
+        // console.log("mic on")
       };
 
       microphone.onstop = () => {
@@ -189,7 +189,8 @@ const fetchIndexFromServer = async () => {
   console.log("fetchIndex is called");
   try {
     // Determine the environment and set the appropriate API endpoint
-    const apiEndpoint = process.env.NODE_ENV === 'development' ? INDEX_API_ENDPOINTS.development : INDEX_API_ENDPOINTS.production;
+    // const apiEndpoint = process.env.NODE_ENV === 'development' ? INDEX_API_ENDPOINTS.development : INDEX_API_ENDPOINTS.production;
+    const apiEndpoint = '/api/index'
 
     const response = await fetch(apiEndpoint, {
       method: 'GET', // Change to GET method
