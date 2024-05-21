@@ -1,15 +1,15 @@
 {
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Credentials", "value": "true" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
-      ]
-    }
-  ],
+  // "headers": [
+  //   {
+  //     "source": "/api/(.*)",
+  //     "headers": [
+  //       { "key": "Access-Control-Allow-Credentials", "value": "true" },
+  //       { "key": "Access-Control-Allow-Origin", "value": "*" },
+  //       { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
+  //       { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
+  //     ]
+  //   }
+  // ],
   "env": {
     "DEEPGRAM_API_KEY": "c63446f4d781c3f89dff8f0528fe5289ac4269c7",
     "GROQ_API_KEY": "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",
