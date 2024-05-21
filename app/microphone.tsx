@@ -58,7 +58,7 @@ export default function Microphone() {
   const isBrowser = typeof window !== "undefined";
   // const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
   //   API_ENDPOINTS.development : API_ENDPOINTS.production;
-  const apiEndpoint = "/api/analyze-text"
+  const apiEndpoint = "/api/analyze_text"
 // console.log('API Endpoint is set to:', apiEndpoint);
   //setup all this stuff in state
 
