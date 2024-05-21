@@ -56,8 +56,9 @@ export default function Microphone() {
   }
 
   const isBrowser = typeof window !== "undefined";
-  const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
-    API_ENDPOINTS.development : API_ENDPOINTS.production;
+  // const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
+  //   API_ENDPOINTS.development : API_ENDPOINTS.production;
+  const apiEndpoint = "/api/analyze-text"
 // console.log('API Endpoint is set to:', apiEndpoint);
   //setup all this stuff in state
 
@@ -190,7 +191,7 @@ const fetchIndexFromServer = async () => {
   try {
     // Determine the environment and set the appropriate API endpoint
     // const apiEndpoint = process.env.NODE_ENV === 'development' ? INDEX_API_ENDPOINTS.development : INDEX_API_ENDPOINTS.production;
-    const apiEndpoint = '/api/index'
+    const apiEndpoint = '/api/index;'
 
     const response = await fetch(apiEndpoint, {
       method: 'GET', // Change to GET method
@@ -268,8 +269,8 @@ const fetchIndexFromServer = async () => {
           setCaption(caption);
           console.log(caption)
           console.log('sending to fastAPI');
-          fetchIndexFromServer();
-          // sendTranscriptionToServer(caption);
+          // fetchIndexFromServer();
+          sendTranscriptionToServer(caption);
           // if (transcriptionsSent === 0) {
           //   console.log(transcriptionsSent)
           //   // sendTranscriptionToServer(caption);
