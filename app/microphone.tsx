@@ -43,17 +43,18 @@ export default function Microphone() {
   const [transcriptionsSent, setTranscriptionsSent] = useState(0);
 
 
+  console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+
   const INDEX_API_ENDPOINTS = {
     development: 'http://localhost:8000/index',
-    production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/index`
+    production:  `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/index`
   }
-
-  // console.log('process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL:', process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL);
 
   const API_ENDPOINTS = {
     development: 'http://localhost:8000/analyze-text/',
     production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/analyze-text`
   }
+
   const isBrowser = typeof window !== "undefined";
   const apiEndpoint = isBrowser && window.location.hostname === 'localhost' ?
     API_ENDPOINTS.development : API_ENDPOINTS.production;
@@ -77,6 +78,7 @@ export default function Microphone() {
 
       microphone.onstart = () => {
         setMicOpen(true);
+        console.log("mic on")
       };
 
       microphone.onstop = () => {
@@ -94,6 +96,16 @@ export default function Microphone() {
 
   //this is a function for adding the microphone??
 
+  // // Automatically start the microphone when component mounts
+  // useEffect(() => {
+  //   toggleMicrophone();
+  //   return () => {
+  //     // Clean up microphone when component unmounts
+  //     // if (microphone) {
+  //     //   microphone.stop();
+  //     // }
+  //   };
+  // }, [toggleMicrophone]);
 
   useEffect(() => {
     // console.log(apiKey + "wtf")
@@ -113,26 +125,22 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
-  // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
-  // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
-  // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
-  // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
-
-  const PUBLIC_PUSHER_APP_KEY = '22266158fe1cbe76cc8';
-  const PUBLIC_PUSHER_CLUSTER = 'us2'
-
   useEffect(() => {
-    const pusher = new Pusher(PUBLIC_PUSHER_APP_KEY, {
-        cluster: PUBLIC_PUSHER_CLUSTER
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+        encrypted: true
     });
+    //note, you need to do some environemntal var stuff to get it to work in vercel
   
-    // console.log('process.env.NEXT_PUBLICs_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+    console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
     // console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
-    channel.bind('new-analysis', function (data: AnalysisData) {
-      console.log("logging return from pusher");
-      console.log(data)
+    channel.bind('new-analysis', function (data) {
+      // console.log(data); // Log the entire data object
+      const question = data.pusher_message; // Correct key
+      console.log('Extracted Question:', question);
+      setExtractedQuestion(question)
       // console.log(data['pusher message'].interview_question);
       // setExtractedQuestion(data['pusher message'].interview_question);
       // console.log('Extracted Question:', extractedQuestion);
@@ -143,6 +151,38 @@ export default function Microphone() {
         channel.unsubscribe();
     };
   }, []);
+
+
+  // console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
+  // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
+  // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
+  // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
+
+  // const PUBLIC_PUSHER_APP_KEY = '22266158fe1cbe76cc8';
+  // const PUBLIC_PUSHER_CLUSTER = 'us2'
+
+  // useEffect(() => {
+  //   const pusher = new Pusher(PUBLIC_PUSHER_APP_KEY, {
+  //       cluster: PUBLIC_PUSHER_CLUSTER
+  //   });
+  
+  //   // console.log('process.env.NEXT_PUBLICs_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+  //   console.log('Pusher initiated!');
+  //   const channel = pusher.subscribe('my-channel');
+
+  //   channel.bind('new-analysis', function (data) {
+  //     console.log("logging return from pusher");
+  //     // console.log(data)
+  //     console.log(data['pusher message'].interview_question);
+  //     setExtractedQuestion(data['pusher message'].interview_question);
+  //     console.log('Extracted Question:', extractedQuestion);
+  //   });
+  
+  //   return () => {
+  //       channel.unbind_all();
+  //       channel.unsubscribe();
+  //   };
+  // }, []);
 
   // Function to send a GET request
 const fetchIndexFromServer = async () => {
@@ -170,8 +210,7 @@ const fetchIndexFromServer = async () => {
 };
 
   const sendTranscriptionToServer = async (transcriptionText: string) => {
-    console.log("send is called")
-  //note, hardcoding 
+  // console.log("send is called")
   try {
     const response = await fetch(apiEndpoint, { // Updated endpoint
       method: 'POST',
@@ -187,7 +226,7 @@ const fetchIndexFromServer = async () => {
     }
 
     const result = await response.json();
-    console.log('Analysis result:', result);
+    // console.log('Analysis result:', result);
   } catch (error) {
     console.error('Error sending transcription to server:', error);
   }
@@ -218,19 +257,17 @@ const fetchIndexFromServer = async () => {
       });
 
       connection.on(LiveTranscriptionEvents.Transcript, (data) => {
+        console.log("live transcription")
         const words = data.channel.alternatives[0].words;
         const caption = words
           .map((word: any) => word.punctuated_word ?? word.word)
           .join(" ");
+        console.log(caption)
         if (caption !== "") {
           setCaption(caption);
+          console.log(caption)
           console.log('sending to fastAPI');
-          fetchIndexFromServer();
-          // sendTranscriptionToServer(caption);
-
-          //1) said, I will only send it once with a counter to avoid looping and see if that solves it
-          //2) I willl send a different request, ie fetchIndex to see if it is the location of the request
-          //or the request itself, that is causing the looping error 
+          sendTranscriptionToServer(caption);
           // if (transcriptionsSent === 0) {
           //   console.log(transcriptionsSent)
           //   // sendTranscriptionToServer(caption);
@@ -242,9 +279,10 @@ const fetchIndexFromServer = async () => {
       setConnection(connection);
       setLoading(false);
     }
-  }, [apiKey, transcriptionsSent]);
+  }, [apiKey]);
 
   // sendTranscriptionToServer("what are your strengths as a designer?");
+
   useEffect(() => {
     const processQueue = async () => {
       if (size > 0 && !isProcessing) {
@@ -275,60 +313,19 @@ const fetchIndexFromServer = async () => {
 
   return (
     <div className="w-full relative">
-      <div>{extractedQuestion}</div>
-      <div className="mt-10 flex flex-col align-middle items-center">
-        {!!userMedia && !!microphone && micOpen ? (
-          <Image
-            src="/speak.png"
-            width="168"
-            height="129"
-            alt="Deepgram Logo"
-            priority
-          />
-        ) : (
-          <Image
-            src="/click.png"
-            width="168"
-            height="129"
-            alt="Deepgram Logo"
-            priority
-          />
-        )}
-
-        <button className="w-24 h-24" onClick={() => toggleMicrophone()}>
-          <Recording
-            width="96"
-            height="96"
-            className={
-              `cursor-pointer` + !!userMedia && !!microphone && micOpen
-                ? "fill-red-400 drop-shadow-glowRed"
-                : "fill-gray-600"
-            }
-          />
-        </button>
-        <div className="mt-20 p-6 text-xl text-center">
-          {caption && micOpen
-            ? caption
-            : "** Realtime transcription by Deepgram **"}
-        </div>
-      </div>
-      <div
-        className="z-20 text-white flex shrink-0 grow-0 justify-around items-center 
-                  fixed bottom-0 right-5 rounded-lg mr-1 mb-5 lg:mr-5 lg:mb-5 xl:mr-10 xl:mb-10 gap-5"
-      >
-        <span className="text-sm text-gray-400">
-          {isListening
-            ? "Deepgram connection open!"
-            : "Deepgram is connecting..."}
-        </span>
-        <Dg
-          width="30"
-          height="30"
-          className={
-            isListening ? "fill-white drop-shadow-glowBlue" : "fill-gray-600"
-          }
-        />
-      </div>
-    </div>
+  <div className="mt-10 flex flex-col align-middle items-center bg-[#DB5A30]">
+    <button className="w-24 h-24" onClick={() => toggleMicrophone()}>
+      <Recording
+        width="96"
+        height="96"
+        className={`cursor-pointer ${!!userMedia && !!microphone && micOpen ? "fill-red-400 drop-shadow-glowRed" : "fill-gray-600"}`}
+      />
+    </button>
+  </div>
+</div>
   );
 }
+
+
+//comments
+
