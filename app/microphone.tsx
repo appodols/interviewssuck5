@@ -43,7 +43,7 @@ export default function Microphone() {
   const [transcriptionsSent, setTranscriptionsSent] = useState(0);
 
 
-  console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+  // console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
 
   const INDEX_API_ENDPOINTS = {
     development: 'http://localhost:8000/index',
