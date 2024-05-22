@@ -1,8 +1,5 @@
 # api/analyze_text.py
-# print(
-#     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-# )
-print("reading analyze_text.py")
+# print("reading analyze_text.py")
 from http.server import BaseHTTPRequestHandler
 import json
 import os
@@ -33,6 +30,7 @@ def analyze_text(excerpt):
 class handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
+        print("33")
         content_length = int(self.headers["Content-Length"])  # Gets the size of data
         post_data = self.rfile.read(content_length)  # Gets the data itself
         data = json.loads(post_data.decode("utf-8"))
@@ -43,18 +41,23 @@ class handler(BaseHTTPRequestHandler):
             return
 
         text = data["text"]
+        print("44")
 
         # Perform text analysis
+        print("47")
         analysis_result = analyze_excerpt(text)
+        print("49")
 
         # Trigger a Pusher event
         pusher_client.trigger(
             "my-channel", "new-analysis", {"pusher message": analysis_result}
         )
-
+        print("55")
         # Send JSON response
+
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()
+        print("60")
         response = bytes(json.dumps({"return message": "Analysis sent"}), "utf-8")
         self.wfile.write(response)
