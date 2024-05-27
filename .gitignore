@@ -15,7 +15,7 @@
 .yarn/install-state.gz
 
 ### Testing ###
-/coverage/
+/coverage/  
 
 ### Next.js ###
 # Next.js build output

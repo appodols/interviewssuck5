@@ -127,6 +127,7 @@ export default function Microphone() {
   }, [apiKey]);
 
   console.log(process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+  console.log(process.env.NEXT_PUBLIC_PUSHER_CLUSTER)
   console.log("shouldn't be blank")
 
   useEffect(() => {
