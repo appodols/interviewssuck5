@@ -147,6 +147,10 @@ export default function Microphone() {
     channel.bind('new-analysis', function (data: AnalysisData) {
       // console.log(data); // Log the entire data object
       console.log('Received data:', data);
+      console.log(data['pusher_message']); // Log the 'pusher_message' key
+      console.log('pusher_message')
+      console.log(data['pusher message'])
+      console.log('pusher message')
       const question = data['pusher_message'] // Correct key
       console.log('Extracted Question:', question);
       // setExtractedQuestion(question)
