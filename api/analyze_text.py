@@ -50,7 +50,7 @@ class handler(BaseHTTPRequestHandler):
 
         # Trigger a Pusher event
         pusher_client.trigger(
-            "my-channel", "new-analysis", {"pusher message": analysis_result}
+            "my-channel", "new-analysis", {"pusher message": "Test for Vercel!"}
         )
         print("55")
         # Send JSON response
