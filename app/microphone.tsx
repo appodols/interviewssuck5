@@ -132,7 +132,7 @@ export default function Microphone() {
 
   useEffect(() => {
     const pusher = new Pusher('22266158fe1cbe76cc85', {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+      cluster: 'us2',
         encrypted: true
     });
     //note, you need to do some environemntal var stuff to get it to work in vercel
