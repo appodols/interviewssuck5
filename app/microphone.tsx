@@ -51,7 +51,7 @@ export default function Microphone() {
   }
 
   const API_ENDPOINTS = {
-    development: 'http://localhost:8000/analyze-text/',
+    development: 'http://localhost:3000/analyze-text/',
     production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/analyze-text`
   }
 
@@ -149,7 +149,7 @@ export default function Microphone() {
       console.log('Received data:', data);
       const question = data['pusher_message'] // Correct key
       console.log('Extracted Question:', question);
-      setExtractedQuestion(question)
+      // setExtractedQuestion(question)
       // console.log(data['pusher message'].interview_question);
       // setExtractedQuestion(data['pusher message'].interview_question);
       // console.log('Extracted Question:', extractedQuestion);
