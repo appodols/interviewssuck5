@@ -126,35 +126,36 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
-  useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-        encrypted: true
-    });
-    //note, you need to do some environemntal var stuff to get it to work in vercel
+  console.log(process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+  console.log("shouldn't be blank")
+
+  // useEffect(() => {
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY, {
+  //       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+  //       encrypted: true
+  //   });
+  //   //note, you need to do some environemntal var stuff to get it to work in vercel
   
-    console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
-    console.log('Pusher initiated!');
-    const channel = pusher.subscribe('my-channel');
+  //   console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY)
+  //   console.log('Pusher initiated!');
+  //   const channel = pusher.subscribe('my-channel');
 
-    channel.bind('new-analysis', function (data) {
-      // console.log(data); // Log the entire data object
-      const question = data.pusher_message; // Correct key
-      console.log('Extracted Question:', question);
-      setExtractedQuestion(question)
-      // console.log(data['pusher message'].interview_question);
-      // setExtractedQuestion(data['pusher message'].interview_question);
-      // console.log('Extracted Question:', extractedQuestion);
-    });
+  //   channel.bind('new-analysis', function (data) {
+  //     // console.log(data); // Log the entire data object
+  //     const question = data.pusher_message; // Correct key
+  //     console.log('Extracted Question:', question);
+  //     setExtractedQuestion(question)
+  //     // console.log(data['pusher message'].interview_question);
+  //     // setExtractedQuestion(data['pusher message'].interview_question);
+  //     // console.log('Extracted Question:', extractedQuestion);
+  //   });
   
-    return () => {
-        channel.unbind_all();
-        channel.unsubscribe();
-    };
-  }, []);
+  //   return () => {
+  //       channel.unbind_all();
+  //       channel.unsubscribe();
+  //   };
+  // }, []);
 
-
-  console.log('Pusher App Key:123', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
   // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
   // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
   // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
