@@ -134,7 +134,9 @@ export default function Microphone() {
     const pusher = new Pusher('22266158fe1cbe76cc85', {
       cluster: 'us2',
       // useTLS: true
-        // encrypted: true
+      // encrypted: true
+      // forceTLS: true
+      
     });
     //note, you need to do some environemntal var stuff to get it to work in vercel
   
@@ -142,7 +144,7 @@ export default function Microphone() {
     console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
-    channel.bind('new-analysis', function (data) {
+    channel.bind('new-analysis', function (data: AnalysisData) {
       // console.log(data); // Log the entire data object
       const question = data.pusher_message; // Correct key
       console.log('Extracted Question:', question);
