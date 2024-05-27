@@ -22,7 +22,7 @@ def analyze_text(excerpt):
     # Trigger a Pusher event
     print(f"{analysis_result} - Hey, it's working!")
     pusher_client.trigger(
-        "my-channel", "new-analysis", {"pusher message": analysis_result}
+        "my-channel", "new-analysis", {"interview_question": analysis_result}
     )
     return {"return message": "Analysis sent"}
 

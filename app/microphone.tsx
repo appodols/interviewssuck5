@@ -147,12 +147,32 @@ export default function Microphone() {
     channel.bind('new-analysis', function (data: AnalysisData) {
       // console.log(data); // Log the entire data object
       console.log('Received data:', data);
+      // if (data && data['pusher_message']) {
+      //   const message = data['pusher_message'];
+      //   if (message && typeof message === 'object' && 'interview_question' in message) {
+      //     const question = message.interview_question;
+      //     console.log('Extracted Question:', question);
+      //     // setExtractedQuestion(question);
+      //   } else {
+      //     console.error('interview_question is undefined in pusher_message or pusher_message is not an object');
+      //   }
+      // } else {
+      //   console.error('pusher_message not found in received data');
+      // }
+
+
+
       console.log(data['pusher_message']); // Log the 'pusher_message' key
       console.log('pusher_message')
-      console.log(data['pusher message'])
-      console.log('pusher message')
-      const question = data['pusher_message'] // Correct key
-      console.log('Extracted Question:', question);
+
+
+
+
+
+      // console.log(data['pusher message'])
+      // console.log('pusher message')
+      // const question = data['pusher_message'] // Correct key
+      // console.log('Extracted Question:', question);
       // setExtractedQuestion(question)
       // console.log(data['pusher message'].interview_question);
       // setExtractedQuestion(data['pusher message'].interview_question);
