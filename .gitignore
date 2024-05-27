@@ -9,6 +9,7 @@
 # Compiled Javascript files
 *.js
 *.js.map
+!app/api/channels-event.js
 
 # Yarn Integrity file
 .yarn/install-state.gz
