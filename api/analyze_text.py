@@ -50,7 +50,9 @@ class handler(BaseHTTPRequestHandler):
 
         # Trigger a Pusher event
         pusher_client.trigger(
-            "my-channel", "new-analysis", {"pusher message": "What are your stregths?"}
+            "my-channel",
+            "new-analysis",
+            {"interview_question": "What are your stregths?"},
         )
         print("55")
         # Send JSON response
