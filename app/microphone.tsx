@@ -126,6 +126,11 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
+  console.log(
+    'process.env.NEXT_PUBLIC_PUSHER_APP_KEY',
+    process.env.NEXT_PUBLIC_PUSHER_APP_KEY
+  );
+
   useEffect(() => {
     const pusher = new Pusher('22266158fe1cbe76cc85', {
       cluster: 'us2',
@@ -134,12 +139,12 @@ export default function Microphone() {
       // forceTLS: true
     });
   
-    // Note, you need to do some environmental var stuff to get it to work in Vercel
-    console.log(
-      'process.env.NEXT_PUBLIC_PUSHER_APP_KEY',
-      process.env.NEXT_PUBLIC_PUSHER_APP_KEY
-    );
-    console.log('Pusher initiated!');
+    // // Note, you need to do some environmental var stuff to get it to work in Vercel
+    // console.log(
+    //   'process.env.NEXT_PUBLIC_PUSHER_APP_KEY',
+    //   process.env.NEXT_PUBLIC_PUSHER_APP_KEY
+    // );
+    // console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
   
     channel.bind('new-analysis', function (data: any) {
@@ -154,7 +159,7 @@ export default function Microphone() {
   
         if (typeof question === 'string' && question.trim() !== '') {
           console.log('Extracted Question:', question);
-          // setExtractedQuestion(question); // If you have a state to update
+          setExtractedQuestion(question); // If you have a state to update
         }
       }
     });
@@ -295,6 +300,7 @@ const fetchIndexFromServer = async () => {
 
   return (
     <div className="w-full relative">
+      {extractedQuestion}
   <div className="mt-10 flex flex-col align-middle items-center bg-[#DB5A30]">
     <button className="w-24 h-24" onClick={() => toggleMicrophone()}>
       <Recording
