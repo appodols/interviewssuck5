@@ -146,23 +146,18 @@ export default function Microphone() {
     channel.bind('new-analysis', function (data: AnalysisData) {
       console.log('Received data:', data);
 
-      if (data && data.pusher_message) {
-        const message = data.pusher_message;
+      // Check if interview_question exists directly in the data
+      if (data && 'interview_question' in data) {
+        const question = data.interview_question;
 
-        if (typeof message === 'object' && 'interview_question' in message) {
-          const question = message.interview_question;
-
-          if (question && question.trim() !== "") {
-            console.log('Extracted Question:', question);
-            // setExtractedQuestion(question); // If you have a state to update
-          } else {
-            console.error('interview_question is an empty string');
-          }
+        if (question && question.trim() !== "") {
+          console.log('Extracted Question:', question);
+          // setExtractedQuestion(question); // If you have a state to update
         } else {
-          console.error('interview_question is undefined in pusher_message or pusher_message is not an object');
+          console.error('interview_question is an empty string');
         }
       } else {
-        console.error('pusher_message not found in received data');
+        console.error('interview_question not found in received data');
       }
     });
 
