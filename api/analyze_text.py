@@ -52,7 +52,7 @@ class handler(BaseHTTPRequestHandler):
             pusher_client.trigger(
                 "my-channel",
                 "new-analysis",
-                {"interview_question": "What are your stregths?"},
+                {"interview_question": analysis_result},
             )
         print("55")
         # Send JSON response
