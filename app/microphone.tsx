@@ -145,21 +145,39 @@ export default function Microphone() {
 
     channel.bind('new-analysis', function (data: AnalysisData) {
       console.log('Received data:', data);
+     // Check if data has a key of pusher_message
+     if ('pusher_message' in data) {
+      console.log('pusher_message exists in data:', data.pusher_message);
+      const message = data.pusher_message;
 
-      // Check if interview_question exists directly in the data
-      if (data && typeof data.interview_question === 'string') {
-        const question: string = data.interview_question;
+      // Check if message has a key of interview_question
+      if (typeof message === 'object' && 'interview_question' in message) {
+        console.log('interview_question exists in pusher_message:', message.interview_question);
+        const question = message.interview_question;
 
-        if (question.trim() !== "") {
+        if (typeof question === 'string' && question.trim() !== "") {
           console.log('Extracted Question:', question);
           // setExtractedQuestion(question); // If you have a state to update
         } else {
-          console.error('interview_question is an empty string');
+          console.error('interview_question is an empty string or not a string');
         }
       } else {
-        console.error('interview_question not found in received data or is not a string');
+        console.error('interview_question not found in pusher_message or pusher_message is not an object');
       }
-    });
+    } else if ('interview_question' in data) {
+      console.log('interview_question exists directly in data:', data.interview_question);
+      const question = data.interview_question;
+
+      if (typeof question === 'string' && question.trim() !== "") {
+        console.log('Extracted Question:', question);
+        // setExtractedQuestion(question); // If you have a state to update
+      } else {
+        console.error('interview_question is an empty string or not a string');
+      }
+    } else {
+      console.error('Neither pusher_message nor interview_question found in received data');
+    }
+  });
     return () => {
       channel.unbind_all();
       channel.unsubscribe();
