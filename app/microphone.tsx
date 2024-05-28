@@ -143,17 +143,30 @@ export default function Microphone() {
     console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
-    channel.bind('new-analysis', function (data: AnalysisData) {
+    channel.bind('new-analysis', function (data: any) {
       console.log('Received data:', data);
-     // Check if data has a key of pusher_message
-     if ('pusher_message' in data) {
-      console.log('pusher_message exists in data:', data.pusher_message);
-      const message = data.pusher_message;
+       // Check if data has a key of pusher_message
+       if ('pusher_message' in data) {
+        console.log('pusher_message exists in data:', (data as any).pusher_message);
+        const message = (data as any).pusher_message;
 
-      // Check if message has a key of interview_question
-      if (typeof message === 'object' && 'interview_question' in message) {
-        console.log('interview_question exists in pusher_message:', message.interview_question);
-        const question = message.interview_question;
+        // Check if message has a key of interview_question
+        if (typeof message === 'object' && 'interview_question' in message) {
+          console.log('interview_question exists in pusher_message:', (message as any).interview_question);
+          const question = (message as any).interview_question;
+
+          if (typeof question === 'string' && question.trim() !== "") {
+            console.log('Extracted Question:', question);
+            // setExtractedQuestion(question); // If you have a state to update
+          } else {
+            console.error('interview_question is an empty string or not a string');
+          }
+        } else {
+          console.error('interview_question not found in pusher_message or pusher_message is not an object');
+        }
+      } else if ('interview_question' in data) {
+        console.log('interview_question exists directly in data:', (data as any).interview_question);
+        const question = (data as any).interview_question;
 
         if (typeof question === 'string' && question.trim() !== "") {
           console.log('Extracted Question:', question);
@@ -162,27 +175,9 @@ export default function Microphone() {
           console.error('interview_question is an empty string or not a string');
         }
       } else {
-        console.error('interview_question not found in pusher_message or pusher_message is not an object');
+        console.error('Neither pusher_message nor interview_question found in received data');
       }
-    } else if ('interview_question' in data) {
-      console.log('interview_question exists directly in data:', data.interview_question);
-      const question = data.interview_question;
-
-      if (typeof question === 'string' && question.trim() !== "") {
-        console.log('Extracted Question:', question);
-        // setExtractedQuestion(question); // If you have a state to update
-      } else {
-        console.error('interview_question is an empty string or not a string');
-      }
-    } else {
-      console.error('Neither pusher_message nor interview_question found in received data');
-    }
-  });
-    return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
-    };
-  }, []);
+    });
 
   // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
   // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
