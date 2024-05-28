@@ -132,53 +132,60 @@ export default function Microphone() {
 
   useEffect(() => {
     const pusher = new Pusher('22266158fe1cbe76cc85', {
-      cluster: 'us2',
-      // useTLS: true
-      // encrypted: true
-      // forceTLS: true
-      
+        cluster: 'us2',
+        // useTLS: true
+        // encrypted: true
+        // forceTLS: true
     });
-    //note, you need to do some environemntal var stuff to get it to work in vercel
+
+    // Note, you need to do some environmental var stuff to get it to work in Vercel
     console.log('process.env.NEXT_PUBLIC_PUSHER_APP_KEY', process.env.NEXT_PUBLIC_PUSHER_APP_KEY);
     console.log('Pusher initiated!');
     const channel = pusher.subscribe('my-channel');
 
     channel.bind('new-analysis', function (data: any) {
-      console.log('Received data:', data);
-      
-       // Check if data has a key of pusher_message
-       if ('pusher_message' in data) {
-        console.log('pusher_message exists in data:', data.pusher_message);
-        const message = data.pusher_message;
+        console.log('Received data:', data);
 
-        // Check if message has a key of interview_question
-        if (typeof message === 'object' && 'interview_question' in message && message.interview_question !== undefined) {
-          console.log('interview_question exists in pusher_message:', message.interview_question);
-          const question = message.interview_question;
+        // Check if data has a key of pusher_message
+        if ('pusher_message' in data) {
+            console.log('pusher_message exists in data:', data.pusher_message);
+            const message = data.pusher_message;
 
-          if (typeof question === 'string' && question.trim() !== "") {
-            console.log('Extracted Question:', question);
-            // setExtractedQuestion(question); // If you have a state to update
-          } else {
-            console.error('interview_question is an empty string or not a string');
-          }
+            // Check if message has a key of interview_question
+            if (typeof message === 'object' && 'interview_question' in message && message.interview_question !== undefined) {
+                console.log('interview_question exists in pusher_message:', message.interview_question);
+                const question = message.interview_question;
+
+                if (typeof question === 'string' && question.trim() !== "") {
+                    console.log('Extracted Question:', question);
+                    // setExtractedQuestion(question); // If you have a state to update
+                } else {
+                    console.error('interview_question is an empty string or not a string');
+                }
+            } else {
+                console.error('interview_question not found in pusher_message or pusher_message is not an object');
+            }
+        } else if ('interview_question' in data && data.interview_question !== undefined) {
+            console.log('interview_question exists directly in data:', data.interview_question);
+            const question = data.interview_question;
+
+            if (typeof question === 'string' && question.trim() !== "") {
+                console.log('Extracted Question:', question);
+                // setExtractedQuestion(question); // If you have a state to update
+            } else {
+                console.error('interview_question is an empty string or not a string');
+            }
         } else {
-          console.error('interview_question not found in pusher_message or pusher_message is not an object');
+            console.error('Neither pusher_message nor interview_question found in received data');
         }
-      } else if ('interview_question' in data && data.interview_question !== undefined) {
-        console.log('interview_question exists directly in data:', data.interview_question);
-        const question = data.interview_question;
-
-        if (typeof question === 'string' && question.trim() !== "") {
-          console.log('Extracted Question:', question);
-          // setExtractedQuestion(question); // If you have a state to update
-        } else {
-          console.error('interview_question is an empty string or not a string');
-        }
-      } else {
-        console.error('Neither pusher_message nor interview_question found in received data');
-      }
     });
+
+    return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+    };
+}, []);
+
   // // console.log('Pusher Cluster:', process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
   // // console.log('Pusher App KeRRRR:', process.env.PUSHER_APP_ID);
   // // console.log('Pusher Cluster:', process.env.PUSHER_APP_SECRET);
