@@ -126,10 +126,10 @@ export default function Microphone() {
     }
   }, [apiKey]);
 
-  console.log(
-    'process.env.NEXT_PUBLIC_PUSHER_APP_KEY',
-    process.env.NEXT_PUBLIC_PUSHER_APP_KEY
-  );
+  // console.log(
+  //   'process.env.NEXT_PUBLIC_PUSHER_APP_KEY',
+  //   process.env.NEXT_PUBLIC_PUSHER_APP_KEY
+  // );
 
   useEffect(() => {
     const pusher = new Pusher('22266158fe1cbe76cc85', {
