@@ -48,12 +48,12 @@ class handler(BaseHTTPRequestHandler):
         analysis_result = analyze_excerpt(text)
         print("49")
 
-        # Trigger a Pusher event
-        pusher_client.trigger(
-            "my-channel",
-            "new-analysis",
-            {"interview_question": "What are your stregths?"},
-        )
+        if analysis_result != "":
+            pusher_client.trigger(
+                "my-channel",
+                "new-analysis",
+                {"interview_question": "What are your stregths?"},
+            )
         print("55")
         # Send JSON response
 

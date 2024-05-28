@@ -94,6 +94,7 @@ def analyze_excerpt(excerpt, testing=False):
             # "reasoning": reasoning,
         }
     except Exception as e:
+        print(f'before chat returns "Error occurred: {str(e)}"')
         return {"interview_question": "", "reasoning": f"Error occurred: {str(e)}"}
 
 
