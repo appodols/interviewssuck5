@@ -147,20 +147,19 @@ export default function Microphone() {
       console.log('Received data:', data);
 
       // Check if interview_question exists directly in the data
-      if (data && 'interview_question' in data) {
-        const question = data.interview_question;
+      if (data && typeof data.interview_question === 'string') {
+        const question: string = data.interview_question;
 
-        if (question && question.trim() !== "") {
+        if (question.trim() !== "") {
           console.log('Extracted Question:', question);
           // setExtractedQuestion(question); // If you have a state to update
         } else {
           console.error('interview_question is an empty string');
         }
       } else {
-        console.error('interview_question not found in received data');
+        console.error('interview_question not found in received data or is not a string');
       }
     });
-
     return () => {
       channel.unbind_all();
       channel.unsubscribe();
