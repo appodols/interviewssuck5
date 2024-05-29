@@ -3,17 +3,26 @@ from groq import Groq  # Assuming Groq is a module you have available.
 import json
 import re
 from dotenv import load_dotenv
+import argparse
 
 load_dotenv()
 
 
+def get_groq_client():
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise ValueError("GROQ_API_KEY is not set in the environment variables")
+    client = Groq(api_key=api_key)
+    return client
+
+
 def analyze_excerpt(excerpt, testing=False):
-    print(excerpt)
+    # print(excerpt)
     if not excerpt:
         return {"interview_question": ""}
 
     # Assuming you have set GROQ_API_KEY in your environment variables
-    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    client = get_groq_client()
     try:
         chat_completion = client.chat.completions.create(
             model="mixtral-8x7b-32768",
@@ -67,38 +76,101 @@ def analyze_excerpt(excerpt, testing=False):
             max_tokens=512,
             top_p=1,
         )
-
-        # Accessing the content string
-        # Get the content string from the message
         content_string = chat_completion.choices[0].message.content
-        print("content_string")
-        print(content_string)
-        # Use regex to find the interview_question and reasoning within the string
+        # print("content string here")
+        # print(content_string)
+
         interview_question_match = re.search(
-            r'"interview_question":\s*"(.*?)"', content_string
+            r'"interview_question":\s*"([^"]+)"', content_string
         )
-
-        # print("intervire question")
-        # print(interview_question_match)
-
-        reasoning_match = re.search(r'"reasoning":\s*"(.*?)"', content_string)
-
         # Extract the groups from the matches if they exist
         interview_question = (
             interview_question_match.group(1) if interview_question_match else ""
         )
-        reasoning = reasoning_match.group(1) if reasoning_match else ""
 
-        return {
-            "interview_question": interview_question,
-            # "reasoning": reasoning,
-        }
+        if interview_question != "":
+            provide_recommendation(interview_question)
+
+        # print("interview_question ")
+        # print(interview_question)
+        return {"interview_question": interview_question}
     except Exception as e:
-        print(f'before chat returns "Error occurred: {str(e)}"')
         return {"interview_question": "", "reasoning": f"Error occurred: {str(e)}"}
 
 
+def provide_recommendation(excerpt, testing=False):
+    # Assuming you have set GROQ_API_KEY in your environment variables
+    print("recommending")
+    client = get_groq_client()
+    try:
+        chat_completion = client.chat.completions.create(
+            model="mixtral-8x7b-32768",
+            messages=[
+                # {
+                #     "role": "system",
+                #     "content": "You will not make questions up unless there is direct evidence of the question from the excerpt",
+                # },
+                {
+                    "role": "system",
+                    "content": "Your content will be a JSON object with the key 'answer recommendation' and the key being a string containing 4 bulleted suggestions",
+                },
+                {
+                    "role": "system",
+                    "content": "You are assistating in a technical interview for a product-management role.  You will be given the value of the current interview question. You will recommend in bullets how the interview should answer the question",
+                },
+                {
+                    "role": "system",
+                    "content": "If you don't know the answer, please say I dont know rather than make up an unlikely answer",
+                },
+                {
+                    "role": "system",
+                    "content": "You always provide your reasoning for determining the interview question (if applicable) by starting the explanation with 'Reasoning'",
+                },
+            ],
+            temperature=0.7,
+            max_tokens=512,
+            top_p=1,
+        )
+
+        # Accessing the content string
+        # Get the content string from the message
+        content_string = chat_completion.choices[0].message.content
+        # print("CONTENT STRING")
+        # print(content_string)
+        answer_recommendation_match = re.search(
+            r'"answer recommendation":\s*"([^"]+)"', content_string
+        )
+        # Extract the answer recommendation from the matches if they exist
+        answer_recommendation = (
+            answer_recommendation_match.group(1) if answer_recommendation_match else ""
+        )
+        print({"answer_recommendation": answer_recommendation})
+        return {"answer_recommendation": answer_recommendation}
+    except Exception as e:
+        return {"answer_recommendation": "", "reasoning": f"Error occurred: {str(e)}"}
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Process some excerpts.")
+    parser.add_argument(
+        "command",
+        choices=["analyze", "recommend"],
+        help="Command to execute (analyze or recommend)",
+    )
+    parser.add_argument("excerpt", type=str, help="Excerpt text to process")
+
+    args = parser.parse_args()
+
+    if args.command == "analyze":
+        result = analyze_excerpt(args.excerpt)
+        print(result)
+    elif args.command == "recommend":
+        result = provide_recommendation(args.excerpt)
+        print(result)
+
+
 if __name__ == "__main__":
-    user_message = input("Please share the excerpt you would like me to analyze: ")
-    analysis_result = analyze_excerpt(user_message)
-    print(analysis_result)
+    main()
+# user_message = input("Please share the excerpt you would like me to analyze: ")
+# analysis_result = analyze_excerpt(user_message)
+# print(analysis_result)
