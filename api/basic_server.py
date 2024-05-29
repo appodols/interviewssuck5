@@ -71,7 +71,7 @@ async def read_root():
 #     return FileResponse("index.html")
 
 
-@app.post("/analyze-text/")
+@app.post("/analyze_text/")
 async def analyze_text(excerpt: InterviewExcerpt):
     # print("receiving!!!" + excerpt.text)
     analysis_result = analyze_excerpt(excerpt.text)  # Your analysis function

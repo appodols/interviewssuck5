@@ -51,7 +51,7 @@ export default function Microphone() {
   }
 
   const API_ENDPOINTS = {
-    development: 'http://localhost:3000/analyze-text/',
+    development: 'http://localhost:8000/analyze-text/',
     production: `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}/api/analyze-text`
   }
 

@@ -16,15 +16,16 @@ pusher_client = pusher.Pusher(
 )
 
 
-def analyze_text(excerpt):
-    print("receiving!!!" + excerpt.text)
-    analysis_result = analyze_excerpt(excerpt)  # Your analysis function
-    # Trigger a Pusher event
-    print(f"{analysis_result} - Hey, it's working!")
-    pusher_client.trigger(
-        "my-channel", "new-analysis", {"interview_question": analysis_result}
-    )
-    return {"return message": "Analysis sent"}
+# def analyze_text(excerpt):
+#     print("receiving!!!" + excerpt.text)
+#     analysis_result = analyze_excerpt(excerpt)  # Your analysis function
+#     # Trigger a Pusher event
+#     print(f"{analysis_result} - Hey, it's working!")
+#     pusher_client.trigger(
+#         "my-channel", "new-analysis", {"interview_question": analysis_result}
+#     )
+#     return {"return message": analysis_result}
+# I don't think this code is being used
 
 
 class handler(BaseHTTPRequestHandler):
