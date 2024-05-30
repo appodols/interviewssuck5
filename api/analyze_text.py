@@ -48,7 +48,7 @@ class handler(BaseHTTPRequestHandler):
         analysis_result = analyze_excerpt(text)
         print("49")
 
-        if analysis_result != "":
+        if analysis_result["interview_question"] != "":
             pusher_client.trigger(
                 "my-channel",
                 "new-analysis",
