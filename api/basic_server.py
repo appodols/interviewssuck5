@@ -75,11 +75,14 @@ async def read_root():
 async def analyze_text(excerpt: InterviewExcerpt):
     # print("receiving!!!" + excerpt.text)
     analysis_result = analyze_excerpt(excerpt.text)  # Your analysis function
-    # Trigger a Pusher event
-    print(f"{analysis_result} - Hey, it's working!")
-    pusher_client.trigger(
-        "my-channel", "new-analysis", {"pusher message": analysis_result}
-    )
+    print(f"Analysis result: {analysis_result}")
+    # # Trigger a Pusher event
+    # print(f"{analysis_result} - Hey, it's working!")
+    if analysis_result["interview_question"] != "":
+        print(f"MUST BE NOT EMPTY : {analysis_result}")
+        pusher_client.trigger(
+            "my-channel", "new-analysis", {"interview_question": analysis_result}
+        )
     return {"return message": analysis_result}
 
 

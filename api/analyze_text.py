@@ -4,8 +4,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import os
 import pusher
-from api.chat_with_felix_groq import analyze_excerpt
-
+from api.chat_with_felix_groq import analyze_excerpt, provide_recommendation
 
 pusher_client = pusher.Pusher(
     app_id="1793970",
@@ -55,6 +54,15 @@ class handler(BaseHTTPRequestHandler):
                 "new-analysis",
                 {"interview_question": analysis_result},
             )
+
+            recs = provide_recommendation(analysis_result)
+            pusher_client.trigger(
+                "recs-channel",
+                "new-recommendation",
+                {"recommendation": recs},
+            )
+            # pusher_client.trigger()
+
         print("55")
         # Send JSON response
 

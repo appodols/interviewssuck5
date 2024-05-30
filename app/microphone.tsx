@@ -156,9 +156,10 @@ export default function Microphone() {
           data.interview_question
         );
         const question = data.interview_question;
+        console.log('Extracted Question:', question);
   
         if (typeof question === 'string' && question.trim() !== '') {
-          console.log('Extracted Question:', question);
+          // console.log('Extracted Question:', question);
           setExtractedQuestion(question); // If you have a state to update
         }
       }
