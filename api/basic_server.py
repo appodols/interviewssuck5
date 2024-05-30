@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 # from test import factorial
 from fastapi.middleware.cors import CORSMiddleware
-from api.chat_with_felix_groq import analyze_excerpt
+from api.chat_with_felix_groq import analyze_excerpt, provide_recommendation
 from pydantic import BaseModel
 
 # import os
@@ -82,6 +82,12 @@ async def analyze_text(excerpt: InterviewExcerpt):
         print(f"MUST BE NOT EMPTY : {analysis_result}")
         pusher_client.trigger(
             "my-channel", "new-analysis", {"interview_question": analysis_result}
+        )
+        recs = provide_recommendation(analysis_result)
+        pusher_client.trigger(
+            "recs-channel",
+            "new-recommendation",
+            {"recommendation": recs},
         )
     return {"return message": analysis_result}
 

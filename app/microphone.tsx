@@ -155,13 +155,14 @@ export default function Microphone() {
           'interview_question exists directly in data:',
           data.interview_question
         );
-        const question = data.interview_question;
+        let question = data.interview_question['interview_question']
         console.log('Extracted Question:', question);
-  
-        if (typeof question === 'string' && question.trim() !== '') {
-          // console.log('Extracted Question:', question);
-          setExtractedQuestion(question); // If you have a state to update
-        }
+        setExtractedQuestion(question);
+        // if (typeof question === 'string' && question.trim() !== '') {
+        //   // console.log('Extracted Question:', question);
+        
+        //   setExtractedQuestion(question); // If you have a state to update
+        // }
       }
     });
   
@@ -301,7 +302,7 @@ const fetchIndexFromServer = async () => {
 
   return (
     <div className="w-full relative">
-      {extractedQuestion}
+      {/* {extractedQuestion} */}
   <div className="mt-10 flex flex-col align-middle items-center bg-[#DB5A30]">
     <button className="w-24 h-24" onClick={() => toggleMicrophone()}>
       <Recording
