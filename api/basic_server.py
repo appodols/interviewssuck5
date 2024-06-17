@@ -7,17 +7,19 @@ from dotenv import load_dotenv
 
 import os
 
-# print("Current working directory:12345", os.getcwd())
-# from fastapi.templating import Jinja2Templates
 from typing import Dict, Callable
 from dotenv import load_dotenv
 
-# from test import factorial
 from fastapi.middleware.cors import CORSMiddleware
 from api.chat_with_felix_groq import analyze_excerpt, provide_recommendation
+
+# this obviously needs to change, with the inputs
 from pydantic import BaseModel
 
-# import os
+
+# what are the main changes here that I need to post?
+#introduce the testing on fastAPI vs process_input
+
 
 load_dotenv()
 
@@ -27,6 +29,9 @@ app = FastAPI()
 class InterviewExcerpt(BaseModel):
     text: str
 
+#this might need to change too
+
+
 
 pusher_client = pusher.Pusher(
     app_id="1793970",
@@ -35,14 +40,7 @@ pusher_client = pusher.Pusher(
     cluster="us2",
     ssl=True,
 )
-
-# pusher_client = pusher.Pusher(
-#     app_id=os.getenv("PUSHER_APP_ID"),
-#     key=os.getenv("PUSHER_KEY"),
-#     secret=os.getenv("PUSHER_SECRET"),
-#     cluster=os.getenv("PUSHER_CLUSTER"),
-#     ssl=True,
-# )
+#this needs to change too, remove the pusher code
 
 
 # Make sure to include the origins you want to allow. Use ["*"] to allow all origins.
@@ -66,11 +64,44 @@ async def read_root():
     return {"message": "Welcome to my API"}
 
 
-# @app.get("/", response_class=FileResponse)
-# def get(request: Request):
-#     return FileResponse("index.html")
 
 
+
+# #we need to change the input here 
+# #it should be called proccess_input
+# #remove the blank code part of it
+# @app.post("/analyze_text/")
+# async def process_input(excerpt: InterviewExcerpt):
+#     # print("receiving!!!" + excerpt.text)
+#     analysis_result = analyze_excerpt(excerpt.text)  # Your analysis function
+#     print(f"Analysis result: {analysis_result}")
+#     # # Trigger a Pusher event
+#     # print(f"{analysis_result} - Hey, it's working!")
+#     if analysis_result["interview_question"] != "":
+#         print(f"MUST BE NOT EMPTY : {analysis_result}")
+#         pusher_client.trigger(
+#             "my-channel", "new-analysis", {"interview_question": analysis_result}
+#         )
+#         recs = provide_recommendation(analysis_result)
+#         pusher_client.trigger(
+#             "recs-channel",
+#             "new-recommendation",
+#             {"recommendation": recs},
+#         )
+#     return {"return message": analysis_result}
+
+
+
+
+
+
+
+
+
+
+#we need to change the input here 
+#it should be called proccess_input
+#remove the blank code part of it
 @app.post("/analyze_text/")
 async def analyze_text(excerpt: InterviewExcerpt):
     # print("receiving!!!" + excerpt.text)
@@ -90,6 +121,11 @@ async def analyze_text(excerpt: InterviewExcerpt):
             {"recommendation": recs},
         )
     return {"return message": analysis_result}
+
+
+
+
+
 
 
 @app.websocket("/listen")
@@ -112,3 +148,4 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         await websocket.close()
         logging.info("WebSocket connection closed.")
+
